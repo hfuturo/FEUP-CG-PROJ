@@ -4,9 +4,11 @@
 
 ## TP 1 Notes
 
-(add your main observations/remarks about your experiments here, in a bulleted list, and remove this line. Some examples below)
+exercicio 1 
+dificuldades: perceber como meter a referencia dos vetores (indices)
+observações: observamos o resultado esperado
 
-- In exercise 1 we observed X
-- In exercise 2 we had difficulties in Y
+exercicio 2
+observações: observamos o resultado esperado
 
-![Screenshot 1](screenshots/cg-t0xgxx-tp1-n.png)
+![Screenshot 1](screenshots/cg-t11g01-tp1-1.png)
