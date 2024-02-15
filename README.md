@@ -1,10 +1,10 @@
 # CG 2023/2024
 
-## Group T0xG0y
+## Group T11G01
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201901010 | ...                |
-| Jane Doe         | 201901011 | ...                |
+| Henrique Silva   | 202105647 | up202105647@up.pt  |
+| Tomás Xavier     | 202108759 | up202108759@up.pt  |
 
 ----
 
