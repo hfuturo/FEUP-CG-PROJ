@@ -4,11 +4,15 @@
 
 ## TP 1 Notes
 
-exercicio 1 
-dificuldades: perceber como meter a referencia dos vetores (indices)
-observações: observamos o resultado esperado
-
-exercicio 2
-observações: observamos o resultado esperado
+### Exercicio 1 
+- Dificuldades: Perceber como meter a referência dos vetores (índices).
+- Observações: Observámos que o lado do paralelogramo que não está inicialmente voltado para nós (parte de trás) é mais escuro devido à iluminação. Observamos o resultado esperado.
 
 ![Screenshot 1](screenshots/cg-t11g01-tp1-1.png)
+![Screenshot 2](screenshots/cg-t11g01-tp1-1(2).png)
+
+### Exercicio 2
+- Observações: Observamos o resultado esperado.
+
+![Screenshot 3](screenshots/cg-t11g01-tp1-2.png)
+![Screenshot 4](screenshots/cg-t11g01-tp1-2(2).png)
