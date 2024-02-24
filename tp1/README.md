@@ -14,5 +14,5 @@
 ### Exercicio 2
 - Observações: Observamos o resultado esperado.
 
-![Screenshot 3](screenshots/cg-t11g01-tp1-2.png)
-![Screenshot 4](screenshots/cg-t11g01-tp1-2(2).png)
+![Screenshot 3](screenshots/cg-t11g01-tp1-1(3).png)
+![Screenshot 4](screenshots/cg-t11g01-tp1-1(4).png)
