@@ -9,3 +9,9 @@
 - Observações: O tangram foi replicado com sucesso aplicando transformações geométricas.
 
 ![Screenshot 1](screenshots/cg-t11g01-tp2-1.png)
+
+### Exercicio 2 
+- Dificuldades: Visualizar em 3D os vertices para os indices dos triangulos.
+- Observações: Pelo que comprendemos no enunciado colocamos corretamente as duas figuras embora por não se estar a analisar as sombras ainda há alguma dificuldade em compreender o cubo em 3D.
+
+![Screenshot 2](screenshots/cg-t11g01-tp2-2.png)
