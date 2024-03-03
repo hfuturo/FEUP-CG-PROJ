@@ -96,6 +96,23 @@ export class MyTangram extends CGFobject {
         this.initGLBuffers();
     }
 
+    enableNormalViz() {
+        this.diamond.enableNormalViz();
+        this.triangle.enableNormalViz();
+        this.parallelogram.enableNormalViz();
+        this.trianglesmall.enableNormalViz();
+        this.trianglebig.enableNormalViz();
+
+    }
+
+    disableNormalViz() {
+        this.diamond.disableNormalViz();
+        this.triangle.disableNormalViz();
+        this.parallelogram.disableNormalViz();
+        this.trianglesmall.disableNormalViz();
+        this.trianglebig.disableNormalViz();
+    }
+
     updateBuffers(complexity){
         // reinitialize buffers
         this.initBuffers();
