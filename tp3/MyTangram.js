@@ -18,6 +18,7 @@ export class MyTangram extends CGFobject {
         this.parallelogram = new MyParallelogram(scene);
         this.trianglesmall = new MyTriangleSmall(scene);
         this.trianglebig = new MyTriangleBig(scene);
+        this.initBuffers();
     }
 
     display() {
@@ -91,5 +92,13 @@ export class MyTangram extends CGFobject {
         this.scene.setDiffuse(160 / 255, 32 / 255, 240 / 255, 1)
         this.trianglesmall.display();
         this.scene.popMatrix();
+
+        this.initGLBuffers();
+    }
+
+    updateBuffers(complexity){
+        // reinitialize buffers
+        this.initBuffers();
+        this.initNormalVizBuffers();
     }
 }
