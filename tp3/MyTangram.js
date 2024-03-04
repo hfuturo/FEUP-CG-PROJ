@@ -30,7 +30,7 @@ export class MyTangram extends CGFobject {
     
         const diamondMatrix = [ cos_a, -sin_a, 0.0,  0.0,
                                 sin_a, cos_a,  0.0,  0.0,
-                                1.0,   0.0,    1.0,  0.0,
+                                0.0,   0.0,    1.0,  0.0,
                                 2.5,   2.6,    0.0,  1.0 ];
         
         // green square
