@@ -12,7 +12,7 @@
 ![Screenshot 2](screenshots/cg-t11g01-tp3-2.png)
 
 ### Exercicio 2
-- Dificuldades: Escrever o loop dos vertices e indexes no prisma
+- Dificuldades: Escrever o loop dos vertices e indexes no prisma, e mais tarde acabar as bases
 - Observações: O prisma foi de facto criado com sucesso sem as bases como sugerido e notou-se a questão de a iluminação se aproximar a um constant shading dado que cada lado tem as mesmas normais em cada ponto mas diferentes entre si logo a iluminação vai ser constante num lado inteiro mas muda quando passa para outro lado
 
 ![Screenshot 3](screenshots/cg-t11g01-tp3-3.png)
