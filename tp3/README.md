@@ -16,3 +16,9 @@
 - Observações: O prisma foi de facto criado com sucesso sem as bases como sugerido e notou-se a questão de a iluminação se aproximar a um constant shading dado que cada lado tem as mesmas normais em cada ponto mas diferentes entre si logo a iluminação vai ser constante num lado inteiro mas muda quando passa para outro lado
 
 ![Screenshot 3](screenshots/cg-t11g01-tp3-3.png)
+
+### Exercicio 3
+- Dificuldades: O loop foi ainda mais complicado desta vez por causa de ter de colocar muitos menos vertices
+- Observações: Observamos que como esperado a iluminação apresenta uma iluminação mais suavizada dando o aspeto de ser curvo por causa de nas arestas não ser uma mudança instantanea de normais que causaria uma iluminação constante em cada face mas diferente entre elas (o prisma)
+
+![Screenshot 4](screenshots/cg-t11g01-tp3-4.png)
