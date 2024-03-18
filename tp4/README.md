@@ -10,3 +10,10 @@
 
 
 ![Screenshot 1](screenshots/cg-t11g01-tp4-1.png)
+
+### Exercicio 1.4 - 1.7
+- Dificuldades: Reorganizar as coordenadas da texturas dos lados e retirar o filtering
+- Observações: Tal como pedido, cubo de minecraft com as texturas não filtradas
+
+
+![Screenshot 1](screenshots/cg-t11g01-tp4-2.png)
