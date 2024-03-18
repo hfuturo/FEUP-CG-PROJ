@@ -15,10 +15,10 @@ export class MyQuad extends CGFobject {
 	
 	initBuffers() {
 		this.vertices = [
-			-0.5, -0.5, 0,	//0
-			0.5, -0.5, 0,	//1
-			-0.5, 0.5, 0,	//2
-			0.5, 0.5, 0		//3
+			-0.5, -0.5, -0.5,	//0
+			-0.5, -0.5,  0.5,	//1
+			-0.5,  0.5, -0.5,	//2
+			-0.5,  0.5,  0.5,	//3
 		];
 
 		//Counter-clockwise reference of vertices
@@ -35,6 +35,13 @@ export class MyQuad extends CGFobject {
 			0, 0, 1
 		];
 		
+		this.texCoords = [
+			0,0,
+			1,0,
+			0,1,
+			1,1
+		];
+
 		/*
 		Texture coords (s,t)
 		+----------> s
@@ -44,13 +51,6 @@ export class MyQuad extends CGFobject {
 		v
         t
         */
-
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
-		]
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
