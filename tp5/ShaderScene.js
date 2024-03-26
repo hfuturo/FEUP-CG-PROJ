@@ -9,9 +9,9 @@ import { MyPlane } from "./MyPlane.js";
 
 function getStringFromUrl(url) {
 	var xmlHttpReq = new XMLHttpRequest();
-    xmlHttpReq.open("GET", url, false);
-    xmlHttpReq.send();
-    return xmlHttpReq.responseText;
+	xmlHttpReq.open("GET", url, false);
+	xmlHttpReq.send();
+	return xmlHttpReq.responseText;
 }
 
 /**
@@ -30,7 +30,7 @@ export class ShaderScene extends CGFscene {
 		this.selectedExampleShader = 0;
 		this.showShaderCode = false;
 
-		this.scaleFactor = 16.0;
+		this.scaleFactor = 1.0;
 	}
 
 	init(application) {
@@ -52,7 +52,7 @@ export class ShaderScene extends CGFscene {
 		this.axis = new CGFaxis(this);
 		this.enableTextures(true);
 
-		this.objects=[
+		this.objects = [
 			new Teapot(this),
 			new MyPlane(this, 50)
 		];
@@ -71,11 +71,14 @@ export class ShaderScene extends CGFscene {
 		this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.appearance.setShininess(120);
 
-		this.texture = new CGFtexture(this, "textures/texture.jpg");
+		//this.texture = new CGFtexture(this, "textures/texture.jpg");
+		this.texture = new CGFtexture(this, "textures/waterTex.jpg");
 		this.appearance.setTexture(this.texture);
 		this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+		
+		//this.texture2 = new CGFtexture(this, "textures/FEUP.jpg");
+		this.texture2 = new CGFtexture(this, "textures/waterMap.jpg");
 
-		this.texture2 = new CGFtexture(this, "textures/FEUP.jpg");
 
 		// shaders initialization
 
@@ -91,7 +94,8 @@ export class ShaderScene extends CGFscene {
 			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/convolution.frag"),
 			new CGFshader(this.gl, "shaders/textureTP1.vert", "shaders/textureTP1.frag"),
 			new CGFshader(this.gl, "shaders/textureTP2.vert", "shaders/textureTP2.frag"),
-			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/textureTP3.frag")
+			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/textureTP3.frag"),
+			new CGFshader(this.gl, "shaders/water.vert", "shaders/water.frag")
 		];
 
 		// additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
@@ -101,6 +105,8 @@ export class ShaderScene extends CGFscene {
 		this.testShaders[6].setUniformsValues({ timeFactor: 0 });
 		this.testShaders[10].setUniformsValues({ uSampler2: 1 });
 		this.testShaders[10].setUniformsValues({ timeFactor: 0 });
+		this.testShaders[12].setUniformsValues({ uSampler2: 1 });
+		this.testShaders[12].setUniformsValues({ timeFactor: 0 });
 
 
 		// Shaders interface variables
@@ -117,7 +123,8 @@ export class ShaderScene extends CGFscene {
 			'Convolution': 8,
 			'TP1': 9,
 			'TP2': 10,
-			'TP3': 11
+			'TP3': 11,
+			'Water': 12
 		};
 
 		// shader code panels references
@@ -133,7 +140,7 @@ export class ShaderScene extends CGFscene {
 
 		// set the scene update period 
 		// (to invoke the update() method every 50ms or as close as possible to that )
-		this.setUpdatePeriod(50);
+		this.setUpdatePeriod(0.000001);
 
 	};
 
@@ -205,6 +212,8 @@ export class ShaderScene extends CGFscene {
 			this.testShaders[6].setUniformsValues({ timeFactor: t / 100 % 100 });
 		else if (this.selectedExampleShader == 10)
 			this.testShaders[10].setUniformsValues({ timeFactor: t / 100 % 100 });
+		else if (this.selectedExampleShader == 12)
+			this.testShaders[12].setUniformsValues({ timeFactor: t / 100 % 100 });
 	}
 
 	// main display function
@@ -237,24 +246,25 @@ export class ShaderScene extends CGFscene {
 		// bind additional texture to texture unit 1
 		this.texture2.bind(1);
 
-		if (this.selectedObject==0) {
+		if (this.selectedObject == 0) {
 			// teapot (scaled and rotated to conform to our axis)
 
 			this.pushMatrix();
-	
+
 			this.translate(0, -6, 0);
 			this.scale(0.5, 0.5, 0.5);
 			this.rotate(-Math.PI / 2, 1, 0, 0);
 			this.objects[0].display();
-	
+
 			this.popMatrix();
 		}
 		else {
 			this.pushMatrix();
-			
+
 			this.scale(25, 25, 25);
+			this.rotate(-Math.PI / 2, 1, 0, 0);
 			this.objects[1].display();
-			
+
 			this.popMatrix();
 		}
 
