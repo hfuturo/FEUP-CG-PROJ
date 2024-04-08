@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { MyPlane } from "./MyPlane.js";
 import { MySphere } from "./MySphere.js";
+import { MyPanorama } from "./MyPanorama.js";
 
 /**
  * MyScene
@@ -34,6 +35,7 @@ export class MyScene extends CGFscene {
     this.Slices = 16;
     this.Stacks = 10;
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
+    this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
 
     this.enableTextures(true);
 
@@ -51,7 +53,7 @@ export class MyScene extends CGFscene {
   }
   initCameras() {
     this.camera = new CGFcamera(
-      1.0,
+      2.0,
       0.1,
       1000,
       vec3.fromValues(50, 10, 15),
@@ -102,6 +104,7 @@ export class MyScene extends CGFscene {
     this.popMatrix();
 
     this.sphere.display();
+    this.panorama.display();
     // ---- END Primitive drawing section
   }
 }

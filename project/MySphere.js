@@ -5,17 +5,11 @@ import { CGFobject, CGFappearance } from '../lib/CGF.js';
  * @param scene - Reference to MyScene object
  */
 export class MySphere extends CGFobject {
-	constructor(scene, slices, stacks) {
+	constructor(scene, slices, stacks, insideOut = false) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks * 2;
-        this.material = new CGFappearance(scene);
-        this.material.setAmbient(0.1, 0.1, 0.1, 1);
-        this.material.setDiffuse(0.9, 0.9, 0.9, 1);
-        this.material.setSpecular(0.1, 0.1, 0.1, 1);
-        this.material.setShininess(10.0);
-        this.material.loadTexture('images/earth.jpg');
-        this.material.setTextureWrap('REPEAT', 'REPEAT');
+        this.insideOut = insideOut;
 		this.initBuffers();
 	}
 
@@ -49,9 +43,14 @@ export class MySphere extends CGFobject {
     
                 // add the vertex to the array
                 this.vertices.push(x, y, z);
-    
-                // the normal is the same as the vertex for a unit sphere
-                this.normals.push(x, y, z);
+                
+                if (this.insideOut) {
+                    this.normals.push(-x, -y, -z);
+                }
+                else{
+                    // the normal is the same as the vertex for a unit sphere
+                    this.normals.push(x, y, z);
+                }
 
                 // add textures
                 this.texCoords.push(360-alpha, beta);
@@ -67,8 +66,13 @@ export class MySphere extends CGFobject {
                 const second = first + this.slices + 1;
     
                 // create the two triangles that make up each square in the grid
-                this.indices.push(first + 1, second, first);
-                this.indices.push(second + 1, second, first + 1);
+                if (this.insideOut) {
+                    this.indices.push(second, first + 1, first);
+                    this.indices.push(second, second + 1, first + 1);
+                } else {
+                    this.indices.push(first + 1, second, first);
+                    this.indices.push(second + 1, second, first + 1);
+                }
             }
         }
     
@@ -78,7 +82,6 @@ export class MySphere extends CGFobject {
 
     display() {
         this.scene.pushMatrix();
-        this.material.apply();
         super.display();
     }
 
