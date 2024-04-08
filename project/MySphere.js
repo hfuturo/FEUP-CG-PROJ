@@ -26,7 +26,7 @@ export class MySphere extends CGFobject {
         this.texCoords = [];
     
         const alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
-        const betaAng = Math.PI / this.stacks * 2; // vertical angle increment
+        const betaAng = Math.PI / this.stacks; // vertical angle increment
 
         const alphaIncrement = 1 / this.slices;
         const betaIncrement = 1 / this.stacks;
@@ -54,7 +54,7 @@ export class MySphere extends CGFobject {
                 this.normals.push(x, y, z);
 
                 // add textures
-                this.texCoords.push(alpha, beta);
+                this.texCoords.push(360-alpha, beta);
                 alpha += alphaIncrement;
             }
             beta += betaIncrement;
