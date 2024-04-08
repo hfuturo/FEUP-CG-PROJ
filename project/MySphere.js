@@ -8,13 +8,13 @@ export class MySphere extends CGFobject {
 	constructor(scene, slices, stacks) {
 		super(scene);
 		this.slices = slices;
-		this.stacks = stacks;
+		this.stacks = stacks * 2;
         this.material = new CGFappearance(scene);
         this.material.setAmbient(0.1, 0.1, 0.1, 1);
         this.material.setDiffuse(0.9, 0.9, 0.9, 1);
         this.material.setSpecular(0.1, 0.1, 0.1, 1);
         this.material.setShininess(10.0);
-        this.material.loadTexture('images/panorama4.jpg');
+        this.material.loadTexture('images/earth.jpg');
         this.material.setTextureWrap('REPEAT', 'REPEAT');
 		this.initBuffers();
 	}
@@ -23,40 +23,52 @@ export class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.texCoords = [];
     
-        var alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
-        var betaAng = Math.PI / this.stacks; // vertical angle increment
-    
+        const alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
+        const betaAng = Math.PI / this.stacks * 2; // vertical angle increment
+
+        const alphaIncrement = 1 / this.slices;
+        const betaIncrement = 1 / this.stacks;
+        let beta = 0;
+
         for(let i = 0; i <= this.stacks; i++) {
-            var sinBeta = Math.sin(i * betaAng);
-            var cosBeta = Math.cos(i * betaAng);
-    
+            const sinBeta = Math.sin(i * betaAng);
+            const cosBeta = Math.cos(i * betaAng);
+            
+            let alpha = 0;
+
             for(let j = 0; j <= this.slices; j++) {
-                var sinAlpha = Math.sin(j * alphaAng);
-                var cosAlpha = Math.cos(j * alphaAng);
+                const sinAlpha = Math.sin(j * alphaAng);
+                const cosAlpha = Math.cos(j * alphaAng);
     
                 // calculate the position of the vertex
-                var x = cosAlpha * sinBeta;
-                var y = sinAlpha * sinBeta;
-                var z = cosBeta;
+                const x = cosAlpha * sinBeta;
+                const y = cosBeta;
+                const z = sinAlpha * sinBeta;
     
                 // add the vertex to the array
                 this.vertices.push(x, y, z);
     
                 // the normal is the same as the vertex for a unit sphere
                 this.normals.push(x, y, z);
+
+                // add textures
+                this.texCoords.push(alpha, beta);
+                alpha += alphaIncrement;
             }
+            beta += betaIncrement;
         }
     
         // calculate indices
         for(let i = 0; i < this.stacks; i++) {
             for(let j = 0; j < this.slices; j++) {
-                var first = i * (this.slices + 1) + j;
-                var second = first + this.slices + 1;
+                const first = i * (this.slices + 1) + j;
+                const second = first + this.slices + 1;
     
                 // create the two triangles that make up each square in the grid
-                this.indices.push(first, second, first + 1);
-                this.indices.push(second, second + 1, first + 1);
+                this.indices.push(first + 1, second, first);
+                this.indices.push(second + 1, second, first + 1);
             }
         }
     
