@@ -1,5 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { MyPlane } from "./MyPlane.js";
+import { MySphere } from "./MySphere.js";
 
 /**
  * MyScene
@@ -26,17 +27,20 @@ export class MyScene extends CGFscene {
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this,30);
-
+    
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
+    this.Slices = 16;
+    this.Stacks = 10;
+    this.sphere = new MySphere(this, this.Slices, this.Stacks);
 
     this.enableTextures(true);
 
-this.texture = new CGFtexture(this, "images/terrain.jpg");
-this.appearance = new CGFappearance(this);
-this.appearance.setTexture(this.texture);
-this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+    this.texture = new CGFtexture(this, "images/terrain.jpg");
+    this.appearance = new CGFappearance(this);
+    this.appearance.setTexture(this.texture);
+    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
   }
   initLights() {
@@ -59,6 +63,19 @@ this.appearance.setTextureWrap('REPEAT', 'REPEAT');
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
     this.setShininess(10.0);
+  }
+
+  updateSphereSlices(Slices) {
+    console.log("Vertical Slices: " + Slices);
+    console.log("Updating sphere with verticalSlices: " + Slices + " and horizontalSlices: " + this.Stacks);
+    this.Slices = Slices;
+    this.sphere.updateBuffers(Slices, this.Stacks);
+  }
+  updateSphereStacks(Stacks) {
+    console.log("Horizontal Slices: " + Stacks);
+    console.log("Updating sphere with verticalSlices: " + this.Slices + " and horizontalSlices: " + Stacks);
+    this.Stacks = Stacks;
+    this.sphere.updateBuffers(this.Slices, Stacks);
   }
   display() {
     // ---- BEGIN Background, camera and axis setup
@@ -84,6 +101,7 @@ this.appearance.setTextureWrap('REPEAT', 'REPEAT');
     this.plane.display();
     this.popMatrix();
 
+    this.sphere.display();
     // ---- END Primitive drawing section
   }
 }
