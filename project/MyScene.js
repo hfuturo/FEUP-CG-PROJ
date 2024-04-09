@@ -2,6 +2,7 @@ import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } fr
 import { MyPlane } from "./MyPlane.js";
 import { MySphere } from "./MySphere.js";
 import { MyPanorama } from "./MyPanorama.js";
+import { MyFlower } from "./MyFlower.js";
 
 /**
  * MyScene
@@ -34,8 +35,10 @@ export class MyScene extends CGFscene {
     this.scaleFactor = 1;
     this.Slices = 16;
     this.Stacks = 10;
+    this.displayNormals = false;
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
+    this.flower = new MyFlower(this, this.Slices, this.Stacks);
 
     this.enableTextures(true);
 
@@ -103,8 +106,21 @@ export class MyScene extends CGFscene {
     this.plane.display();
     this.popMatrix();
 
-    this.sphere.display();
+    this.pushMatrix();
     this.panorama.display();
+    this.popMatrix();
+    
+    this.pushMatrix();
+    this.flower.display();    
+    this.popMatrix();
+
+    if (this.displayNormals) {
+      this.flower.enableNormalViz();
+    }
+    else {
+      this.flower.disableNormalViz();
+    }
+
     // ---- END Primitive drawing section
   }
 }

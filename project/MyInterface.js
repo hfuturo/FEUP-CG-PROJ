@@ -29,6 +29,8 @@ export class MyInterface extends CGFinterface {
         //Slider element in GUI
         this.gui.add(this.scene, 'Stacks', 0.01, 1.0).name('Stacks').onChange(this.scene.updateSphereStacks.bind(this.scene));
 
+        this.gui.add(this.scene, 'displayNormals').name("Display normals");
+
         return true;
     }
 }
