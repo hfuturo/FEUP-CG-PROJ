@@ -15,7 +15,7 @@ export class MyPanorama extends CGFobject {
 	}
 
     initBuffers() {
-        this.Sphere = new MySphere(this.scene, this.slices, this.stacks, true);
+        this.Sphere = new MySphere(this.scene, this.slices, this.stacks, true, true);
         this.material = new CGFappearance(this.scene);
         this.material.setAmbient(0, 0, 0, 1);
         this.material.setDiffuse(0.9, 0.9, 0.9, 1);

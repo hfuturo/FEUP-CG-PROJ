@@ -1,4 +1,5 @@
 import { CGFobject } from '../lib/CGF.js';
+import { MySphere } from './MySphere.js';
 /**
  * MyReceptacle
  * @constructor
@@ -7,81 +8,28 @@ import { CGFobject } from '../lib/CGF.js';
 export class MyReceptacle extends CGFobject {
 	constructor(scene, slices, stacks, insideOut = false) {
 		super(scene);
-		this.slices = slices;
-		this.stacks = stacks * 2;
-        this.insideOut = insideOut;
+
+        this.sphere = new MySphere(scene, slices, stacks, insideOut);
+
 		this.initBuffers();
 	}
 
-	initBuffers() {
-        this.vertices = [];
-        this.indices = [];
-        this.normals = [];
-    
-        const alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
-        const betaAng = Math.PI / this.stacks; // vertical angle increment
+	display() {
+        this.scene.pushMatrix();
+        this.sphere.display();
+        this.scene.popMatrix();
 
-        const alphaIncrement = 1 / this.slices;
-        const betaIncrement = 1 / this.stacks;
-        let beta = 0;
 
-        for(let i = 0; i <= this.stacks; i++) {
-            const sinBeta = Math.sin(i * betaAng);
-            const cosBeta = Math.cos(i * betaAng);
-            
-            let alpha = 0;
-
-            for(let j = 0; j <= this.slices; j++) {
-                const sinAlpha = Math.sin(j * alphaAng);
-                const cosAlpha = Math.cos(j * alphaAng);
-    
-                // calculate the position of the vertex
-                const x = cosAlpha * sinBeta;
-                const y = cosBeta;
-                const z = sinAlpha * sinBeta;
-    
-                // add the vertex to the array
-                this.vertices.push(x, y, z);
-                
-                if (this.insideOut) {
-                    this.normals.push(-x, -y, -z);
-                }
-                else{
-                    // the normal is the same as the vertex for a unit sphere
-                    this.normals.push(x, y, z);
-                }
-
-                // add textures
-                alpha += alphaIncrement;
-            }
-            beta += betaIncrement;
-        }
-    
-        // calculate indices
-        for(let i = 0; i < this.stacks; i++) {
-            for(let j = 0; j < this.slices; j++) {
-                const first = i * (this.slices + 1) + j;
-                const second = first + this.slices + 1;
-    
-                // create the two triangles that make up each square in the grid
-                if (this.insideOut) {
-                    this.indices.push(second, first + 1, first);
-                    this.indices.push(second, second + 1, first + 1);
-                } else {
-                    this.indices.push(first + 1, second, first);
-                    this.indices.push(second + 1, second, first + 1);
-                }
-            }
-        }
-    
-        this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
 
-    // display() {
-    //     this.scene.pushMatrix();
-    //     super.display();
-    // }
+    enableNormalViz() {
+        this.sphere.enableNormalViz();
+    }
+
+    disableNormalViz() {
+        this.sphere.disableNormalViz();
+    }
 
 	updateBuffers(verticalSlices,horizontalSlices) {
 		this.slices = 3 + Math.round(9 * verticalSlices); //complexity varies 0-1, so slices varies 3-12

@@ -1,15 +1,16 @@
-import { CGFobject, CGFappearance } from '../lib/CGF.js';
+import { CGFobject } from '../lib/CGF.js';
 /**
- * MyDiamond
+ * MySphere
  * @constructor
  * @param scene - Reference to MyScene object
  */
 export class MySphere extends CGFobject {
-	constructor(scene, slices, stacks, insideOut = false) {
+	constructor(scene, slices, stacks, insideOut = false, putTextures = false) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks * 2;
         this.insideOut = insideOut;
+        this.putTextures = putTextures;
 		this.initBuffers();
 	}
 
@@ -17,7 +18,9 @@ export class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        this.texCoords = [];
+
+        if (this.putTextures) 
+            this.texCoords = [];
     
         const alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
         const betaAng = Math.PI / this.stacks; // vertical angle increment
@@ -53,7 +56,9 @@ export class MySphere extends CGFobject {
                 }
 
                 // add textures
-                this.texCoords.push(360-alpha, beta);
+                if (this.putTextures)
+                    this.texCoords.push(360-alpha, beta);
+
                 alpha += alphaIncrement;
             }
             beta += betaIncrement;
@@ -78,11 +83,6 @@ export class MySphere extends CGFobject {
     
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
-    }
-
-    display() {
-        this.scene.pushMatrix();
-        super.display();
     }
 
 	updateBuffers(verticalSlices,horizontalSlices) {
