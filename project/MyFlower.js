@@ -21,6 +21,7 @@ export class MyFlower extends CGFobject {
         this.numberOfPetals = numberOfPetals;
         this.receptacleRadius = receptacleRadius;
         this.stemRadius = stemRadius;
+        this.stemHeight = 5;
 
         this.petalColors = ["#ff7b00", "#ff8800", "#ff9500", "#ffa200", "#ffaa00", "#ffb700", "#ffc300", "#ffd000", "#ffdd00", "#ffea00"];
         this.petalColor = this.getRandomColor(this.petalColors);
@@ -38,7 +39,7 @@ export class MyFlower extends CGFobject {
         
         // stem
         this.scene.pushMatrix();
-        this.scene.scale(this.stemRadius, 5, this.stemRadius);
+        this.scene.scale(this.stemRadius, this.stemHeight, this.stemRadius);
         this.scene.setAmbient(...this.stemColor);
         this.scene.setDiffuse(...this.stemColor);
         this.scene.setSpecular(...this.stemColor);
@@ -47,7 +48,7 @@ export class MyFlower extends CGFobject {
 
         // receptacle
         this.scene.pushMatrix();
-        this.scene.translate(0, 5, 0);
+        this.scene.translate(0, this.stemHeight, 0);
         this.scene.scale(this.receptacleRadius, this.receptacleRadius, this.receptacleRadius);
         this.scene.setAmbient(...this.receptacleColor);
         this.scene.setDiffuse(...this.receptacleColor);
@@ -63,11 +64,21 @@ export class MyFlower extends CGFobject {
 
             this.scene.pushMatrix();
 
-            this.scene.translate(-this.receptacleRadius * Math.sin(angleRad), this.receptacleRadius * Math.cos(angleRad), 0);
-            this.scene.translate(Math.sin(angleRad) / 2, -Math.cos(angleRad) / 2, 0);
-            this.scene.translate(0, 5, 0);
+            // coloca petalas no sitio correto
+            this.scene.translate(-this.receptacleRadius*1.3 * Math.sin(angleRad), this.receptacleRadius*1.3 * Math.cos(angleRad), 0);
+            
+            // junta petalas no centro da esfera
+            this.scene.translate(Math.sin(angleRad), -Math.cos(angleRad), 0);
+            
+            // translação para o nível da esfera
+            this.scene.translate(0, this.stemHeight, 0);
+
+            // aplica rotação
             this.scene.rotate(angleRad, 0, 0, 1);
-            this.scene.scale(this.petalSize / 2, this.petalSize / 2, this.petalSize / 2);
+
+            // tamanho das petalas
+            this.scene.scale(this.petalSize / 2, this.petalSize, this.petalSize / 2);
+            
             this.scene.setAmbient(...this.petalColor);
             this.scene.setDiffuse(...this.petalColor);
             this.scene.setSpecular(...this.petalColor);

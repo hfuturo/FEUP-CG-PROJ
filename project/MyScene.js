@@ -26,9 +26,6 @@ export class MyScene extends CGFscene {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    //Initialize scene objects
-    this.axis = new CGFaxis(this);
-    this.plane = new MyPlane(this,30);
     
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -36,10 +33,14 @@ export class MyScene extends CGFscene {
     this.Slices = 16;
     this.Stacks = 10;
     this.displayNormals = false;
+    
+    //Initialize scene objects
+    this.axis = new CGFaxis(this);
+    this.plane = new MyPlane(this,30);
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.flower = new MyFlower(this, this.Slices, this.Stacks, 1, 12, 1, 0.2);
-    //                                                 petal size, n petalas, raio esfera
+    this.flower = new MyFlower(this, this.Slices, this.Stacks, 1, 8, 1, 0.2);
+    
     this.enableTextures(true);
 
     this.texture = new CGFtexture(this, "images/terrain.jpg");

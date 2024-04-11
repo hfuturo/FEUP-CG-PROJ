@@ -20,13 +20,13 @@ export class MyPetal extends CGFobject {
 		
 		// upwards triangle
 		this.scene.pushMatrix();
-		this.scene.translate(0, 2, 1);
+		this.scene.translate(0, 0.8, 0.7);
 		this.triangle.display();
 		this.scene.popMatrix();
 
 		// downwards triangle
 		this.scene.pushMatrix();
-		this.scene.translate(0, 2, 1);
+		this.scene.translate(0, 0.8, 0.7);
 		this.scene.rotate(deg2rad * 40, 1, 0, 0);
 		this.scene.rotate(deg2rad * 180, 1, 0, 0);
 		this.triangle.display();
