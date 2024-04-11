@@ -8,7 +8,7 @@ import { MyStem } from './MyStem.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFlower extends CGFobject {
-	constructor(scene, slices, stacks) {
+	constructor(scene, slices, stacks, numberOfPetals) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
@@ -16,6 +16,8 @@ export class MyFlower extends CGFobject {
         this.stem = new MyStem(scene, this.slices, this.stacks);
         this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
         this.petal = new MyPetal(scene);
+
+        this.numberOfPetals = numberOfPetals;
 
 		this.initBuffers();
 	}
@@ -42,8 +44,10 @@ export class MyFlower extends CGFobject {
         this.receptacle.display();
         this.scene.popMatrix();
 
+        let angleIncremenet = 360.0 / this.numberOfPetals;
+
         // petals
-        for (let angle = 0; angle < 360; angle += 30) {
+        for (let angle = 0; angle < 360; angle += angleIncremenet) {
             if (angle == 180) continue;
 
             const angleRad = angle * deg2rad;

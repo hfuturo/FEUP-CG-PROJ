@@ -38,7 +38,7 @@ export class MyScene extends CGFscene {
     this.displayNormals = false;
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.flower = new MyFlower(this, this.Slices, this.Stacks);
+    this.flower = new MyFlower(this, this.Slices, this.Stacks, 7);
 
     this.enableTextures(true);
 
