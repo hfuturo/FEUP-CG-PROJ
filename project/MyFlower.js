@@ -8,7 +8,7 @@ import { MyStem } from './MyStem.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFlower extends CGFobject {
-	constructor(scene, slices, stacks, numberOfPetals) {
+	constructor(scene, slices, stacks, petalSize, numberOfPetals, receptacleRadius, stemRadius) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
@@ -17,7 +17,10 @@ export class MyFlower extends CGFobject {
         this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
         this.petal = new MyPetal(scene);
 
+        this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
+        this.receptacleRadius = receptacleRadius;
+        this.stemRadius = stemRadius;
 
         this.petalColors = ["#ff7b00", "#ff8800", "#ff9500", "#ffa200", "#ffaa00", "#ffb700", "#ffc300", "#ffd000", "#ffdd00", "#ffea00"];
         this.petalColor = this.getRandomColor(this.petalColors);
@@ -35,7 +38,7 @@ export class MyFlower extends CGFobject {
         
         // stem
         this.scene.pushMatrix();
-        this.scene.scale(0.2, 5, 0.2);
+        this.scene.scale(this.stemRadius, 5, this.stemRadius);
         this.scene.setAmbient(...this.stemColor);
         this.scene.setDiffuse(...this.stemColor);
         this.scene.setSpecular(...this.stemColor);
@@ -45,6 +48,7 @@ export class MyFlower extends CGFobject {
         // receptacle
         this.scene.pushMatrix();
         this.scene.translate(0, 5, 0);
+        this.scene.scale(this.receptacleRadius, this.receptacleRadius, this.receptacleRadius);
         this.scene.setAmbient(...this.receptacleColor);
         this.scene.setDiffuse(...this.receptacleColor);
         this.scene.setSpecular(...this.receptacleColor);
@@ -55,15 +59,15 @@ export class MyFlower extends CGFobject {
 
         // petals
         for (let angle = 0; angle < 360; angle += angleIncremenet) {
-            if (angle == 180) continue;
-
             const angleRad = angle * deg2rad;
 
             this.scene.pushMatrix();
-            this.scene.scale(0.5, 0.5, 0.5);
-            this.scene.translate(0, 10, 0);
+
+            this.scene.translate(-this.receptacleRadius * Math.sin(angleRad), this.receptacleRadius * Math.cos(angleRad), 0);
+            this.scene.translate(Math.sin(angleRad) / 2, -Math.cos(angleRad) / 2, 0);
+            this.scene.translate(0, 5, 0);
             this.scene.rotate(angleRad, 0, 0, 1);
-            this.scene.translate(0, 1, 0);
+            this.scene.scale(this.petalSize / 2, this.petalSize / 2, this.petalSize / 2);
             this.scene.setAmbient(...this.petalColor);
             this.scene.setDiffuse(...this.petalColor);
             this.scene.setSpecular(...this.petalColor);

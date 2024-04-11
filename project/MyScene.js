@@ -38,8 +38,8 @@ export class MyScene extends CGFscene {
     this.displayNormals = false;
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.flower = new MyFlower(this, this.Slices, this.Stacks, 7);
-
+    this.flower = new MyFlower(this, this.Slices, this.Stacks, 1, 12, 1, 0.2);
+    //                                                 petal size, n petalas, raio esfera
     this.enableTextures(true);
 
     this.texture = new CGFtexture(this, "images/terrain.jpg");
