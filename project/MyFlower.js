@@ -2,6 +2,7 @@ import { CGFobject } from '../lib/CGF.js';
 import { MyPetal } from './MyPetal.js';
 import { MyReceptacle } from './MyReceptacle.js';
 import { MyStem } from './MyStem.js';
+import { generateRandomNumber } from './utils.js';
 /**
  * MyFlower
  * @constructor
@@ -13,15 +14,31 @@ export class MyFlower extends CGFobject {
 		this.slices = slices;
 		this.stacks = stacks;
 
-        this.stem = new MyStem(scene, this.slices, this.stacks);
-        this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
-        this.petal = new MyPetal(scene);
-
         this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
         this.receptacleRadius = receptacleRadius;
         this.stemRadius = stemRadius;
         this.stemHeight = 5;
+
+        // angulo que os 2 triangulos fazem entre si
+        this.petalRotationAngle = generateRandomNumber(50);
+
+        // angulo de ligação à esfera
+        this.unionAngle = (() => {
+
+            const angles = [];
+            const angleIncremenet = 360.0 / this.numberOfPetals;
+
+            for (let angle = 0; angle < 360; angle += angleIncremenet)
+                angles.push(generateRandomNumber(10, -10));
+
+            return angles;
+
+        })();
+
+        this.stem = new MyStem(scene, this.slices, this.stacks);
+        this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
+        this.petal = new MyPetal(scene, this.petalRotationAngle);
 
         this.petalColors = ["#ff7b00", "#ff8800", "#ff9500", "#ffa200", "#ffaa00", "#ffb700", "#ffc300", "#ffd000", "#ffdd00", "#ffea00"];
         this.petalColor = this.getRandomColor(this.petalColors);
@@ -59,7 +76,7 @@ export class MyFlower extends CGFobject {
         let angleIncremenet = 360.0 / this.numberOfPetals;
 
         // petals
-        for (let angle = 0; angle < 360; angle += angleIncremenet) {
+        for (let angle = 0, i = 0; angle < 360; angle += angleIncremenet, i++) {
             const angleRad = angle * deg2rad;
 
             this.scene.pushMatrix();
@@ -73,7 +90,10 @@ export class MyFlower extends CGFobject {
             // translação para o nível da esfera
             this.scene.translate(0, this.stemHeight, 0);
 
-            // aplica rotação
+            // aplica angulo de união da pétal ao coração
+            this.scene.rotate(deg2rad * this.unionAngle[i], 1, 0, 0);
+
+            // aplica rotação para formar um circulo à volta do coração
             this.scene.rotate(angleRad, 0, 0, 1);
 
             // tamanho das petalas
@@ -133,7 +153,8 @@ export class MyFlower extends CGFobject {
     }
 
     getRandomColor(colors) {
-        return this.hexToRgbA(colors[parseInt(Math.random() * (colors.length - 1))]);
+        return this.hexToRgbA(colors[generateRandomNumber(colors.length - 1)])
     }
+
 }
 

@@ -3,6 +3,7 @@ import { MyPlane } from "./MyPlane.js";
 import { MySphere } from "./MySphere.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyFlower } from "./MyFlower.js";
+import { generateRandomNumber } from "./utils.js";
 
 /**
  * MyScene
@@ -26,6 +27,10 @@ export class MyScene extends CGFscene {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
+    const numberOfPetals = generateRandomNumber(15, 10);
+    const petalSize = 1 + generateRandomNumber(5, 1) * 0.1;   // 1
+    const receptacleRadius = 1 + generateRandomNumber(5, 1) * 0.1; // 1
+    const stemRadius = generateRandomNumber(3, 1) * 0.1; // 0.2
     
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -39,7 +44,7 @@ export class MyScene extends CGFscene {
     this.plane = new MyPlane(this,30);
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.flower = new MyFlower(this, this.Slices, this.Stacks, 1, 8, 1, 0.2);
+    this.flower = new MyFlower(this, this.Slices, this.Stacks, petalSize, numberOfPetals, receptacleRadius, stemRadius);
     
     this.enableTextures(true);
 
@@ -60,7 +65,7 @@ export class MyScene extends CGFscene {
       2.0,
       0.1,
       1000,
-      vec3.fromValues(0, 5, 2),
+      vec3.fromValues(0, 5, 5),
       vec3.fromValues(0, 5, 0)
     );
   }
