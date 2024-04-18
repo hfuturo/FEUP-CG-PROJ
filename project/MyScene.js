@@ -4,6 +4,7 @@ import { MySphere } from "./MySphere.js";
 import { MyPanorama } from "./MyPanorama.js";
 import { MyFlower } from "./MyFlower.js";
 import { generateRandomNumber } from "./utils.js";
+import { MyGarden } from "./MyGarden.js";
 
 /**
  * MyScene
@@ -44,7 +45,8 @@ export class MyScene extends CGFscene {
     this.plane = new MyPlane(this,30);
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.flower = new MyFlower(this, this.Slices, this.Stacks, petalSize, numberOfPetals, receptacleRadius, stemRadius);
+    // this.flower = new MyFlower(this, this.Slices, this.Stacks, petalSize, numberOfPetals, receptacleRadius, stemRadius);
+    this.garden = new MyGarden(this, this.Slices, this.Stacks, 5, 5);
     
     this.enableTextures(true);
 
@@ -116,16 +118,9 @@ export class MyScene extends CGFscene {
     this.panorama.display();
     this.popMatrix();
     
-    this.pushMatrix();
-    this.flower.display();    
+    this.pushMatrix();  
+    this.garden.display();
     this.popMatrix();
-
-    if (this.displayNormals) {
-      this.flower.enableNormalViz();
-    }
-    else {
-      this.flower.disableNormalViz();
-    }
 
     // ---- END Primitive drawing section
   }

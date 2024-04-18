@@ -16,12 +16,13 @@ export class MyFlower extends CGFobject {
 
         this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
+        // this.numberOfPetals = 4;
         this.receptacleRadius = receptacleRadius;
         this.stemRadius = stemRadius;
         this.stemHeight = 5;
-
+        
         // angulo que os 2 triangulos fazem entre si
-        this.petalRotationAngle = generateRandomNumber(50);
+        this.petalRotationAngle = generateRandomNumber(10, 50);
 
         // angulo de ligação à esfera
         this.unionAngle = (() => {
@@ -82,23 +83,23 @@ export class MyFlower extends CGFobject {
             this.scene.pushMatrix();
 
             // coloca petalas no sitio correto
-            this.scene.translate(-this.receptacleRadius*1.3 * Math.sin(angleRad), this.receptacleRadius*1.3 * Math.cos(angleRad), 0);
-            
-            // junta petalas no centro da esfera
-            this.scene.translate(Math.sin(angleRad), -Math.cos(angleRad), 0);
+            this.scene.translate(-this.receptacleRadius*0.6 * Math.sin(angleRad), 0, -this.receptacleRadius*0.6 * Math.cos(angleRad));
             
             // translação para o nível da esfera
             this.scene.translate(0, this.stemHeight, 0);
 
             // aplica angulo de união da pétal ao coração
             this.scene.rotate(deg2rad * this.unionAngle[i], 1, 0, 0);
-
+            
             // aplica rotação para formar um circulo à volta do coração
-            this.scene.rotate(angleRad, 0, 0, 1);
-
+            this.scene.rotate(angleRad, 0, 1, 0);
+            
+            // mete pétalas para baixo
+            this.scene.rotate(80 * deg2rad, -1, 0, 0);
+            
             // tamanho das petalas
             this.scene.scale(this.petalSize / 2, this.petalSize, this.petalSize / 2);
-            
+
             this.scene.setAmbient(...this.petalColor);
             this.scene.setDiffuse(...this.petalColor);
             this.scene.setSpecular(...this.petalColor);
