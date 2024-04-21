@@ -28,25 +28,21 @@ export class MyScene extends CGFscene {
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-    const numberOfPetals = generateRandomNumber(15, 10);
-    const petalSize = 1 + generateRandomNumber(5, 1) * 0.1;   // 1
-    const receptacleRadius = 1 + generateRandomNumber(5, 1) * 0.1; // 1
-    const stemRadius = generateRandomNumber(3, 1) * 0.1; // 0.2
-    
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.Slices = 16;
     this.Stacks = 10;
     this.displayNormals = false;
+    this.gardenRows = 5;
+    this.gardenCols = 5;
     
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this,30);
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    // this.flower = new MyFlower(this, this.Slices, this.Stacks, petalSize, numberOfPetals, receptacleRadius, stemRadius);
-    this.garden = new MyGarden(this, this.Slices, this.Stacks, 5, 5);
+    this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols);
     
     this.enableTextures(true);
 
@@ -71,6 +67,7 @@ export class MyScene extends CGFscene {
       vec3.fromValues(0, 5, 0)
     );
   }
+
   setDefaultAppearance() {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -84,12 +81,24 @@ export class MyScene extends CGFscene {
     this.Slices = Slices;
     this.sphere.updateBuffers(Slices, this.Stacks);
   }
+
   updateSphereStacks(Stacks) {
     console.log("Horizontal Slices: " + Stacks);
     console.log("Updating sphere with verticalSlices: " + this.Slices + " and horizontalSlices: " + Stacks);
     this.Stacks = Stacks;
     this.sphere.updateBuffers(this.Slices, Stacks);
   }
+
+  updateGardenRows(gardenRows) {
+    this.gardenRows = Math.round(gardenRows);
+    this.garden.updateMatrix(Math.round(gardenRows), this.gardenCols);
+  }
+
+  updateGardenCols(gardenCols) {
+    this.gardenCols = Math.round(gardenCols);
+    this.garden.updateMatrix(this.gardenRows, Math.round(gardenCols));
+  }
+
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
