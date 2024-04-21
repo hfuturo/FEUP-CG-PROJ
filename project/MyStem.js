@@ -3,6 +3,8 @@ import { MyCilinder } from './MyCilinder.js';
 import { MySphere } from './MySphere.js';
 import { MyLeaf } from './MyLeaf.js';
 import { CGFtexture,CGFappearance } from '../lib/CGF.js';
+import { generateRandomNumber } from "./utils.js";
+
 /**
  * MyStem
  * @constructor
@@ -14,40 +16,41 @@ export class MyStem extends CGFobject {
 		this.slices = slices;
 		this.stacks = stacks;
 		this.numberOfTubes = numberOfTubes;
-		console.log("numberOfTubes: " + numberOfTubes);
 		this.height = height;
 		this.radius = radius;
 		this.rotationsY = [];
 		this.rotationsZ = [];
 		this.heights = [];
-		this.leafs = [];
+		this.leaves = [];
+		this.positions = [];
 		this.finalx = 0;
 		this.finaly = 0;
 		this.finalz = 0;
 		const deg2rad = Math.PI / 180.0;
 		this.cilinder = new MyCilinder(scene, slices, stacks);
 		for (let i = 0; i < numberOfTubes; i++) {
-			// random rotations
-			this.rotationsY.push((Math.random() * 30 - 15) * deg2rad);
-			this.rotationsZ.push((Math.random() * 30 - 15)*deg2rad);
-			this.heights.push(Math.random() * height );
-			this.leafs.push(Math.random() * 360 * deg2rad);
-			this.cilinder.setTextureCoords(new Array(this.slices * this.stacks).fill(0).map((_, i) => i % this.slices / (this.slices - 1), i));
+			this.rotationsY.push(generateRandomNumber(-15,15) * deg2rad);
+			this.rotationsZ.push(generateRandomNumber(-15,15)*deg2rad);
+			this.heights.push(generateRandomNumber(height-2,height+2));
+			this.leaves.push(generateRandomNumber(0,360)*deg2rad);
+			//this.cilinder.setTextureCoords(new Array(this.slices * this.stacks).fill(0).map((_, i) => i % this.slices / (this.slices - 1), i));
 
 			//this.rotationsY.push(deg2rad * 20 * i);
 			//this.rotationsZ.push(deg2rad * 10 * i);
 		}
 		this.sphere = new MySphere(scene, slices, stacks);
 		
-		this.texture2 = new CGFtexture(this.scene, "images/stem.png");
+		/*this.texture2 = new CGFtexture(this.scene, "images/stem.png");
 		this.appearance2 = new CGFappearance(this.scene);
 		this.appearance2.setTexture(this.texture2);
 		this.appearance2.setTextureWrap('REPEAT', 'REPEAT');
+		*/
 		this.leaf = new MyLeaf(scene, 20);
 		this.initBuffers();
 	}
 
 	display() {
+		
 		// deg2rad
 		/*
 		// First Cylinder
@@ -78,19 +81,20 @@ export class MyStem extends CGFobject {
 		this.cilinder.display();
 		this.scene.popMatrix();
 		*/
-		const deg2rad = Math.PI / 180.0;
 		var x = 0;
 		var y = 0;
 		var z = 0
 		var rotateY = 0;
 		var rotateZ = 0;
+		var value = 0;
 		for (let i = 0; i < this.numberOfTubes; i++) {
 			//random value around this.height / this.numberOfTubes
-			var value = this.heights[i];
+			value = this.heights[i];
 			rotateY = this.rotationsY[i];
 			rotateZ = this.rotationsZ[i];
+			
 			this.scene.pushMatrix();
-			this.appearance2.apply();
+			//this.appearance2.apply();
 			this.scene.translate(x, y, z);
 			this.scene.rotate(rotateY, 0, 1, 0);
 			this.scene.rotate(rotateZ, 0, 0, 1);
@@ -101,8 +105,7 @@ export class MyStem extends CGFobject {
 			if (i != 0){
 				this.scene.pushMatrix();
 				this.scene.translate(x, y, z);
-				//random rotation between 0 and 360
-				this.scene.rotate(this.leafs[i], 0, 1, 0);
+				this.scene.rotate(this.leaves[i], 0, 1, 0);
 				this.leaf.display();
 				this.scene.popMatrix();
 			}
@@ -113,10 +116,9 @@ export class MyStem extends CGFobject {
 
 			this.scene.pushMatrix();
 			this.scene.translate(x, y, z);
-			this.scene.scale(this.radius, this.radius, this.radius );
+			this.scene.scale(this.radius, this.radius, this.radius);
 			this.sphere.display();
 			this.scene.popMatrix();
-
 			/*
 			//calculate the unitary vector
 			var vectorx = Math.cos(rotateZ) * Math.cos(rotateY);
@@ -206,6 +208,7 @@ export class MyStem extends CGFobject {
 		this.cilinder.display();
 		this.scene.popMatrix();
 		*/
+		
 		this.initGLBuffers();
 	}
 

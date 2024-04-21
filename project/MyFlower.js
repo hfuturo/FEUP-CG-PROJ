@@ -9,11 +9,12 @@ import { generateRandomNumber } from './utils.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFlower extends CGFobject {
-	constructor(scene, slices, stacks, numberOfTubes, petalSize, numberOfPetals, receptacleRadius, stemRadius) {
+	constructor(scene, slices, stacks, numberOfTubes, tubeHeight, petalSize, numberOfPetals, receptacleRadius, stemRadius) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
         this.numberOfTubes = numberOfTubes;
+        this.tubeHeight = tubeHeight;
 
         this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
@@ -38,7 +39,7 @@ export class MyFlower extends CGFobject {
 
         })();
 
-        this.stem = new MyStem(scene, this.slices, this.stacks,this.numberOfTubes, this.tubeHeight, this.stemRadius);
+        this.stem = new MyStem(scene, this.slices, this.stacks, this.numberOfTubes, this.tubeHeight, this.stemRadius);
         this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
         this.petal = new MyPetal(scene, this.petalRotationAngle);
 
@@ -61,6 +62,7 @@ export class MyFlower extends CGFobject {
         this.scene.setAmbient(...this.stemColor);
         this.scene.setDiffuse(...this.stemColor);
         this.scene.setSpecular(...this.stemColor);
+        
         this.stem.display();
         this.scene.popMatrix();
 

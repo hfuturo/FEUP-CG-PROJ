@@ -38,9 +38,7 @@ export class MyLeaf extends CGFobject {
 		// downwards triangle
 		this.scene.pushMatrix();
 		this.scene.translate(0, 0, 1);
-		this.scene.rotate(deg2rad * -90, 1, 0, 0);
-		this.scene.rotate(deg2rad * this.rotationAngle, 1, 0, 0);
-		this.scene.rotate(deg2rad * 180, 1, 0, 0);
+		this.scene.rotate(deg2rad * (90 + this.rotationAngle), 1, 0, 0);
 		this.scene.scale(0.5,1,1);
 		this.triangle.display();
 		this.scene.popMatrix();

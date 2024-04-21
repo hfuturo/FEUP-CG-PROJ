@@ -35,8 +35,8 @@ export class MyScene extends CGFscene {
     this.Stacks = 10;
     this.NumberOfTubes = 5;
     this.displayNormals = false;
-    this.gardenRows = 5;
-    this.gardenCols = 5;
+    this.gardenRows = 1;
+    this.gardenCols = 1;
     
     //Initialize scene objects
     this.axis = new CGFaxis(this);
@@ -44,7 +44,6 @@ export class MyScene extends CGFscene {
     this.sphere = new MySphere(this, this.Slices, this.Stacks);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
     this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols);
-    
     this.enableTextures(true);
 
     this.texture = new CGFtexture(this, "images/terrain.jpg");
@@ -129,6 +128,7 @@ export class MyScene extends CGFscene {
     this.popMatrix();
     
     this.pushMatrix();  
+    this.appearance.apply();
     this.garden.display();
     this.popMatrix();
 
