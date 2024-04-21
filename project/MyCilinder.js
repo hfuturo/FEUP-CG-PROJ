@@ -69,5 +69,43 @@ export class MyCilinder extends CGFobject {
 		this.initBuffers();
 		this.initNormalVizBuffers();
 	}
+
+	setTextureCoords() {
+		this.texCoords = [];
+		const alphaAng = 2 * Math.PI / this.slices;
+		const step = 1 / this.stacks;
+
+		let ang = 0;
+
+		for (let i = 0; i < this.slices; i++) {
+			this.texCoords.push(0.5 + 0.5 * Math.cos(ang), 0.5 - 0.5 * Math.sin(ang));
+			for (let j = 0; j < this.stacks; j++) {
+				this.texCoords.push(i / this.slices, j * step);
+			}
+			ang += alphaAng;
+		}
+
+		this.texCoords.push(0.5, 0.5);
+		this.texCoords.push(0.5, 0.5);
+
+		ang = 0;
+
+		for (let i = 0; i < this.slices; i++) {
+			this.texCoords.push(0.5 + 0.5 * Math.cos(ang), 0.5 - 0.5 * Math.sin(ang));
+			this.texCoords.push(0.5 + 0.5 * Math.cos(ang), 0.5 - 0.5 * Math.sin(ang));
+			if (i > this.slices - 2) {
+				this.texCoords.push(0.5, 0.5);
+				this.texCoords.push(0.5, 0.5);
+			}
+			else {
+				this.texCoords.push(i / this.slices, 0);
+				this.texCoords.push(i / this.slices, 1);
+			}
+
+			ang += alphaAng;
+		}
+
+		this.updateTexCoordsGLBuffers();
+	}
 }
 

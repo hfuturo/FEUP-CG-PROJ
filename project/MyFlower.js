@@ -9,10 +9,11 @@ import { generateRandomNumber } from './utils.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFlower extends CGFobject {
-	constructor(scene, slices, stacks, petalSize, numberOfPetals, receptacleRadius, stemRadius) {
+	constructor(scene, slices, stacks, numberOfTubes, petalSize, numberOfPetals, receptacleRadius, stemRadius) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
+        this.numberOfTubes = numberOfTubes;
 
         this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
@@ -37,7 +38,7 @@ export class MyFlower extends CGFobject {
 
         })();
 
-        this.stem = new MyStem(scene, this.slices, this.stacks);
+        this.stem = new MyStem(scene, this.slices, this.stacks,this.numberOfTubes, this.tubeHeight, this.stemRadius);
         this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
         this.petal = new MyPetal(scene, this.petalRotationAngle);
 
@@ -57,7 +58,6 @@ export class MyFlower extends CGFobject {
         
         // stem
         this.scene.pushMatrix();
-        this.scene.scale(this.stemRadius, this.stemHeight, this.stemRadius);
         this.scene.setAmbient(...this.stemColor);
         this.scene.setDiffuse(...this.stemColor);
         this.scene.setSpecular(...this.stemColor);
@@ -66,7 +66,7 @@ export class MyFlower extends CGFobject {
 
         // receptacle
         this.scene.pushMatrix();
-        this.scene.translate(0, this.stemHeight, 0);
+        this.scene.translate(this.stem.finalx, this.stem.finaly, this.stem.finalz);
         this.scene.scale(this.receptacleRadius, this.receptacleRadius, this.receptacleRadius);
         this.scene.setAmbient(...this.receptacleColor);
         this.scene.setDiffuse(...this.receptacleColor);
@@ -86,7 +86,7 @@ export class MyFlower extends CGFobject {
             this.scene.translate(-this.receptacleRadius*0.6 * Math.sin(angleRad), 0, -this.receptacleRadius*0.6 * Math.cos(angleRad));
             
             // translação para o nível da esfera
-            this.scene.translate(0, this.stemHeight, 0);
+            this.scene.translate(this.stem.finalx, this.stem.finaly, this.stem.finalz);
 
             // aplica angulo de união da pétal ao coração
             this.scene.rotate(deg2rad * this.unionAngle[i], 1, 0, 0);

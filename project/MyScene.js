@@ -33,6 +33,7 @@ export class MyScene extends CGFscene {
     this.scaleFactor = 1;
     this.Slices = 16;
     this.Stacks = 10;
+    this.NumberOfTubes = 5;
     this.displayNormals = false;
     this.gardenRows = 5;
     this.gardenCols = 5;
@@ -50,7 +51,7 @@ export class MyScene extends CGFscene {
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-
+    
   }
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
@@ -60,11 +61,11 @@ export class MyScene extends CGFscene {
   }
   initCameras() {
     this.camera = new CGFcamera(
-      2.0,
+      1.0,
       0.1,
       1000,
-      vec3.fromValues(0, 5, 5),
-      vec3.fromValues(0, 5, 0)
+      vec3.fromValues(-1, 2.5, 0.1),
+      vec3.fromValues(0, 2.5, 0)
     );
   }
 

@@ -10,7 +10,7 @@ export class MyGarden extends CGFobject {
         this.cols = cols;
         this.slices = slices;
         this.stacks = stacks;
-
+        this.NumberOfTubes = 2;
         this.flowers = (() => {
             const flowers = [];
 
@@ -25,6 +25,7 @@ export class MyGarden extends CGFobject {
                         scene,
                         this.slices,
                         this.stacks,
+                        this.NumberOfTubes,
                         petalSize,
                         numberOfPetals,
                         receptacleRadius,
@@ -80,6 +81,7 @@ export class MyGarden extends CGFobject {
                         this.scene,
                         this.slices,
                         this.stacks,
+                        this.NumberOfTubes,
                         petalSize,
                         numberOfPetals,
                         receptacleRadius,
