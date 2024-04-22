@@ -9,26 +9,20 @@ import { generateRandomNumber } from './utils.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFlower extends CGFobject {
-	constructor(scene, slices, stacks, numberOfTubes, tubeHeight, petalSize, numberOfPetals, receptacleRadius, stemRadius) {
+	constructor(scene, slices, stacks, numberOfTubes, tubeHeight, petalSize, numberOfPetals, receptacleRadius, stemRadius, sphere, cilinder, semiSphere, triangle) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
-        this.numberOfTubes = numberOfTubes;
-        this.tubeHeight = tubeHeight;
-
         this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
         // this.numberOfPetals = 4;
         this.receptacleRadius = receptacleRadius;
-        this.stemRadius = stemRadius;
-        this.stemHeight = 5;
-        
+  
         // angulo que os 2 triangulos fazem entre si
         this.petalRotationAngle = generateRandomNumber(10, 50);
 
         // angulo de ligação à esfera
         this.unionAngle = (() => {
-
             const angles = [];
             const angleIncremenet = 360.0 / this.numberOfPetals;
 
@@ -39,16 +33,16 @@ export class MyFlower extends CGFobject {
 
         })();
 
-        this.stem = new MyStem(scene, this.slices, this.stacks, this.numberOfTubes, this.tubeHeight, this.stemRadius);
-        this.receptacle = new MyReceptacle(scene, this.slices, this.stacks);
-        this.petal = new MyPetal(scene, this.petalRotationAngle);
-
         this.petalColors = ["#ff7b00", "#ff8800", "#ff9500", "#ffa200", "#ffaa00", "#ffb700", "#ffc300", "#ffd000", "#ffdd00", "#ffea00"];
         this.petalColor = this.getRandomColor(this.petalColors);
         this.receptacleColors = ["#ede0d4", "#e6ccb2", "#ddb892", "#b08968", "#7f5539", "#9c6644"];
         this.receptacleColor = this.getRandomColor(this.receptacleColors);
         this.stemColors = ["#004b23", "#006400", "#007200", "#008000", "#38b000", "#70e000", "#9ef01a", "#ccff33"];
         this.stemColor = this.getRandomColor(this.stemColors);
+        
+        this.stem = new MyStem(scene, this.slices, this.stacks, numberOfTubes, tubeHeight, stemRadius, this.stemColor,cilinder,semiSphere,triangle);
+        this.receptacle = new MyReceptacle(scene, sphere);
+        this.petal = new MyPetal(scene, triangle, this.petalRotationAngle);
 
 		this.initBuffers();
 	}

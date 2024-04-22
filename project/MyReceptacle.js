@@ -1,16 +1,13 @@
 import { CGFobject } from '../lib/CGF.js';
-import { MySphere } from './MySphere.js';
 /**
  * MyReceptacle
  * @constructor
  * @param scene - Reference to MyScene object
  */
 export class MyReceptacle extends CGFobject {
-	constructor(scene, slices, stacks, insideOut = false) {
+	constructor(scene, sphere) {
 		super(scene);
-
-        this.sphere = new MySphere(scene, slices, stacks, insideOut);
-
+        this.sphere = sphere;
 		this.initBuffers();
 	}
 
@@ -18,8 +15,6 @@ export class MyReceptacle extends CGFobject {
         this.scene.pushMatrix();
         this.sphere.display();
         this.scene.popMatrix();
-
-
         this.initGLBuffers();
     }
 

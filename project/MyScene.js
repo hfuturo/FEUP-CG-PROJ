@@ -1,10 +1,11 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { MyPlane } from "./MyPlane.js";
 import { MySphere } from "./MySphere.js";
-import { MyPanorama } from "./MyPanorama.js";
-import { MyFlower } from "./MyFlower.js";
-import { generateRandomNumber } from "./utils.js";
+import { MyPanorama } from "./MyPanorama.js"
 import { MyGarden } from "./MyGarden.js";
+import { MySemiSphere } from "./MySemiSphere.js";
+import { MyCilinder } from "./MyCilinder.js";
+import { MyTriangle } from "./MyTriangle.js";
 
 /**
  * MyScene
@@ -16,7 +17,7 @@ export class MyScene extends CGFscene {
   }
   init(application) {
     super.init(application);
-    
+
     this.initCameras();
     this.initLights();
 
@@ -37,20 +38,23 @@ export class MyScene extends CGFscene {
     this.displayNormals = false;
     this.gardenRows = 1;
     this.gardenCols = 1;
-    
+
     //Initialize scene objects
     this.axis = new CGFaxis(this);
-    this.plane = new MyPlane(this,30);
-    this.sphere = new MySphere(this, this.Slices, this.Stacks);
+    this.plane = new MyPlane(this, 30);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols);
+    this.sphere = new MySphere(this, this.Slices, this.Stacks);
+    this.semiSphere = new MySemiSphere(this, this.Slices, this.Stacks, false, true);
+    this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
+    this.triangle = new MyTriangle(this);
+    this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle);
     this.enableTextures(true);
 
     this.texture = new CGFtexture(this, "images/terrain.jpg");
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-    
+
   }
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
@@ -62,7 +66,7 @@ export class MyScene extends CGFscene {
     this.camera = new CGFcamera(
       1.0,
       0.1,
-      1000,
+      300,
       vec3.fromValues(-1, 2.5, 0.1),
       vec3.fromValues(0, 2.5, 0)
     );
@@ -117,17 +121,17 @@ export class MyScene extends CGFscene {
 
     this.pushMatrix();
     this.appearance.apply();
-    this.translate(0,-100,0);
-    this.scale(400,400,400);
-    this.rotate(-Math.PI/2.0,1,0,0);
+    this.translate(0, -100, 0);
+    this.scale(400, 400, 400);
+    this.rotate(-Math.PI / 2.0, 1, 0, 0);
     this.plane.display();
     this.popMatrix();
 
     this.pushMatrix();
     this.panorama.display();
     this.popMatrix();
-    
-    this.pushMatrix();  
+
+    this.pushMatrix();
     this.appearance.apply();
     this.garden.display();
     this.popMatrix();
