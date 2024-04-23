@@ -6,6 +6,7 @@ import { MyFlower } from "./MyFlower.js";
 import { generateRandomNumber } from "./utils.js";
 import { MyGarden } from "./MyGarden.js";
 import { MyBee } from "./MyBee.js";
+import { MyAnimatedBee } from "./MyAnimatedBee.js";
 
 /**
  * MyScene
@@ -52,14 +53,33 @@ export class MyScene extends CGFscene {
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(this.texture);
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+
+    // animações
+    this.setUpdatePeriod(10);
+
+    this.appStartTime = Date.now();
+
+    this.beeVal = 0;
+
+    this.animObjs = [new MyAnimatedBee(this, this.Slices, this.Stacks)];
     
   }
+
+  update(t) {
+    // animação contínua baseada no tempo atual e app start time
+    const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
+    this.beeVal = -2 + 2 * Math.sin(timeSinceAppStart * Math.PI * 3);
+    this.animObjs[0].update(timeSinceAppStart);
+  }
+
   initLights() {
     this.lights[0].setPosition(15, 0, 5, 1);
     this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[0].enable();
     this.lights[0].update();
   }
+
+
   initCameras() {
     this.camera = new CGFcamera(
       1.0,
@@ -129,12 +149,12 @@ export class MyScene extends CGFscene {
     this.panorama.display();
     this.popMatrix();
     
-    this.pushMatrix();  
-    this.appearance.apply();
-    // this.garden.display();
-    this.bee.display(this.gl);
-    this.popMatrix();
+    // this.pushMatrix();  
+    // this.bee.display(this.gl);
+    // this.popMatrix();
 
+    this.animObjs[0].display(this.gl);
     // ---- END Primitive drawing section
   }
+
 }
