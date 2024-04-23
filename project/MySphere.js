@@ -57,7 +57,7 @@ export class MySphere extends CGFobject {
 
                 // add textures
                 if (this.putTextures)
-                    this.texCoords.push(360-alpha, beta);
+                    this.texCoords.push(alpha, beta);
 
                 alpha += alphaIncrement;
             }

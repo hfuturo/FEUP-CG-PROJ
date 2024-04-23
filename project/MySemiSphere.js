@@ -5,12 +5,10 @@ import { CGFobject } from '../lib/CGF.js';
  * @param scene - Reference to MyScene object
  */
 export class MySemiSphere extends CGFobject {
-	constructor(scene, slices, stacks, insideOut = false, putTextures = false) {
+	constructor(scene, slices, stacks) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks * 2;
-        this.insideOut = insideOut;
-        this.putTextures = putTextures;
 		this.initBuffers();
 	}
 
@@ -18,9 +16,7 @@ export class MySemiSphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-
-        if (this.putTextures) 
-            this.texCoords = [];
+        this.texCoords = [];
     
         const alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
         const betaAng = Math.PI / (this.stacks ); // vertical angle increment
@@ -46,19 +42,10 @@ export class MySemiSphere extends CGFobject {
     
                 // add the vertex to the array
                 this.vertices.push(x, y, z);
-                
-                if (this.insideOut) {
-                    this.normals.push(-x, -y, -z);
-                }
-                else{
-                    // the normal is the same as the vertex for a unit sphere
-                    this.normals.push(x, y, z);
-                }
+                // the normal is the same as the vertex for a unit sphere
+                this.normals.push(x, y, z);
 
-                // add textures
-                if (this.putTextures)
-                    this.texCoords.push(360-alpha, beta);
-
+                this.texCoords.push(360-alpha, beta);
                 alpha += alphaIncrement;
             }
             beta += betaIncrement;
@@ -71,13 +58,10 @@ export class MySemiSphere extends CGFobject {
                 const second = first + this.slices + 1;
     
                 // create the two triangles that make up each square in the grid
-                if (this.insideOut) {
-                    this.indices.push(second, first + 1, first);
-                    this.indices.push(second, second + 1, first + 1);
-                } else {
+
                     this.indices.push(first + 1, second, first);
                     this.indices.push(second + 1, second, first + 1);
-                }
+                
             }
         }
     

@@ -9,7 +9,7 @@ import { generateRandomNumber } from "./utils.js";
  * @param scene - Reference to MyScene object
  */
 export class MyStem extends CGFobject {
-	constructor(scene, slices, stacks ,numberOfTubes, height, radius, color,cilinder,semiSphere,triangle) {
+	constructor(scene, slices, stacks ,numberOfTubes, height, radius, color,cilinder,semiSphere,leaf,petal_stemAppearance) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
@@ -17,6 +17,9 @@ export class MyStem extends CGFobject {
 		this.height = height;
 		this.radius = radius;
 		this.color = color;
+		this.semiSphere = semiSphere;
+		this.leaf = leaf;
+		this.petal_stemAppearance = petal_stemAppearance;
 		this.rotationsY = [];
 		this.rotationsZ = [];
 		this.heights = [];
@@ -32,16 +35,7 @@ export class MyStem extends CGFobject {
 			this.rotationsZ.push(generateRandomNumber(-15,15)*deg2rad);
 			this.heights.push(generateRandomNumber(height-2,height+2));
 			this.leaves.push(generateRandomNumber(0,360)*deg2rad);
-			this.cilinder.setTextureCoords(new Array(this.slices * this.stacks).fill(0).map((_, i) => i % this.slices / (this.slices - 1), i));
 		}
-		this.semiSphere = semiSphere;
-		this.texture = new CGFtexture(this.scene, "images/stem.png");
-		this.appearance = new CGFappearance(this.scene);
-		this.appearance.setTexture(this.texture);
-		
-		this.appearance.setTextureWrap('REPEAT', 'REPEAT');
-		
-		this.leaf = new MyLeaf(scene,cilinder,triangle, 20);
 		this.initBuffers();
 	}
 
@@ -77,25 +71,20 @@ export class MyStem extends CGFobject {
 		this.cilinder.display();
 		this.scene.popMatrix();
 		*/
-		var x = 0;
-		var y = 0;
-		var z = 0
+		this.finalx = 0;
+		this.finaly = 0;
+		this.finalz = 0;
 		var rotateY = 0;
 		var rotateZ = 0;
 		var value = 0;
-		var totalrotationY = 0;
+		//var totalrotationY = 0;
 		for (let i = 0; i < this.numberOfTubes; i++) {
-			//random value around this.height / this.numberOfTubes
 			value = this.heights[i];
 			rotateY = this.rotationsY[i];
 			rotateZ = this.rotationsZ[i];
-			totalrotationY += rotateY;
+			//totalrotationY += rotateY;
 			this.scene.pushMatrix();
-			this.appearance.apply();
-			this.scene.setAmbient(...this.color);
-			this.scene.setDiffuse(...this.color);
-			this.scene.setSpecular(...this.color);
-			this.scene.translate(x, y, z);
+			this.scene.translate(this.finalx, this.finaly, this.finalz);
 			this.scene.rotate(rotateY, 0, 1, 0);
 			this.scene.rotate(rotateZ, 0, 0, 1);
 			this.scene.scale(this.radius, value, this.radius);
@@ -103,21 +92,22 @@ export class MyStem extends CGFobject {
 			this.scene.popMatrix();
 
 			//first offset
-			x -= ((value) * Math.sin(rotateZ)) * Math.cos(rotateY);
-			y += ((value) * Math.cos(rotateZ));
-			z += ((value) * Math.sin(rotateZ)) * Math.sin(rotateY);
+			this.finalx -= ((value) * Math.sin(rotateZ)) * Math.cos(rotateY);
+			this.finaly += ((value) * Math.cos(rotateZ));
+			this.finalz += ((value) * Math.sin(rotateZ)) * Math.sin(rotateY);
 			if (i != this.numberOfTubes-1){
 				this.scene.pushMatrix();
-				this.scene.translate(x, y, z);
+				this.scene.translate(this.finalx, this.finaly, this.finalz);
 				this.scene.rotate(this.leaves[i], 0, 1, 0);
 				this.leaf.display();
 				this.scene.popMatrix();
+				
 				this.scene.pushMatrix();
-				this.appearance.apply();
+				this.petal_stemAppearance.apply();
 				this.scene.setAmbient(...this.color);
 				this.scene.setDiffuse(...this.color);
 				this.scene.setSpecular(...this.color);
-				this.scene.translate(x, y, z);
+				this.scene.translate(this.finalx, this.finaly, this.finalz);
 				this.scene.scale(this.radius, this.radius, this.radius);
 				this.semiSphere.display();
 				this.scene.popMatrix();
@@ -174,9 +164,6 @@ export class MyStem extends CGFobject {
 			//z += (-(Math.cos(rotateZ) * this.radius * Math.sin(rotateY * 2 + this.rotationsY[i + 1])) + Math.cos(this.rotationsZ[i + 1] + rotateZ) * this.radius * Math.sin(rotateY * 2 + this.rotationsY[i + 1]));
 			*/
 		}
-		this.finalx = x;
-		this.finaly = y;
-		this.finalz = z;
 
 		/*
 		this.scene.pushMatrix();
@@ -211,8 +198,6 @@ export class MyStem extends CGFobject {
 		this.cilinder.display();
 		this.scene.popMatrix();
 		*/
-		
-		this.initGLBuffers();
 	}
 
 	enableNormalViz() {

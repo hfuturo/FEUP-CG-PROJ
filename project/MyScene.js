@@ -39,21 +39,33 @@ export class MyScene extends CGFscene {
     this.gardenRows = 1;
     this.gardenCols = 1;
 
+    this.appearance = new CGFappearance(this);
+    this.appearance.setTexture(new CGFtexture(this, "images/terrain.jpg"));
+    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.petal_stemAppearance = new CGFappearance(this);
+    this.petal_stemAppearance.setTexture(new CGFtexture(this, "images/stem.png"));
+    this.petal_stemAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.leafappearance = new CGFappearance(this);
+    this.leafappearance.setTexture(new CGFtexture(this, "images/leaf.jpg"));
+    this.leafappearance.setTextureWrap('REPEAT', 'REPEAT');
+
+    this.flowerAppearance = new CGFappearance(this);
+    this.flowerAppearance.setTexture(new CGFtexture(this, "images/flower.jpg"));
+    this.flowerAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this, 30);
     this.panorama = new MyPanorama(this, 50, 50, "Panorama4.jpg");
-    this.sphere = new MySphere(this, this.Slices, this.Stacks);
-    this.semiSphere = new MySemiSphere(this, this.Slices, this.Stacks, false, true);
+    this.sphere = new MySphere(this, this.Slices, this.Stacks, false, true);
+    this.semiSphere = new MySemiSphere(this, this.Slices, this.Stacks);
     this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
     this.triangle = new MyTriangle(this);
-    this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle);
+    this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle,this.petal_stemAppearance,this.leafappearance,this.flowerAppearance);
     this.enableTextures(true);
 
-    this.texture = new CGFtexture(this, "images/terrain.jpg");
-    this.appearance = new CGFappearance(this);
-    this.appearance.setTexture(this.texture);
-    this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
   }
   initLights() {
@@ -67,8 +79,8 @@ export class MyScene extends CGFscene {
       1.0,
       0.1,
       300,
-      vec3.fromValues(-1, 2.5, 0.1),
-      vec3.fromValues(0, 2.5, 0)
+      vec3.fromValues(0.1, 17, 0.1),
+      vec3.fromValues(0, 0.1, 0)
     );
   }
 
@@ -127,9 +139,7 @@ export class MyScene extends CGFscene {
     this.plane.display();
     this.popMatrix();
 
-    this.pushMatrix();
     this.panorama.display();
-    this.popMatrix();
 
     this.pushMatrix();
     this.appearance.apply();

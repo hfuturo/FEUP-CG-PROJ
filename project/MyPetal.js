@@ -32,8 +32,6 @@ export class MyPetal extends CGFobject {
 		this.scene.rotate(deg2rad * 180, 1, 0, 0);
 		this.triangle.display();
 		this.scene.popMatrix();
-
-		this.initGLBuffers();
 	}
 
 	enableNormalViz() {

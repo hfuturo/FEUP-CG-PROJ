@@ -1,9 +1,10 @@
 import { CGFobject } from "../lib/CGF.js";
 import { MyFlower } from "./MyFlower.js";
 import { generateRandomNumber } from "./utils.js";
+import { MyLeaf } from "./MyLeaf.js";
 
 export class MyGarden extends CGFobject {
-    constructor(scene, slices, stacks, rows, cols,sphere,cilinder,semiSphere,triangle) {
+    constructor(scene, slices, stacks, rows, cols,sphere,cilinder,semiSphere,triangle,petal_stemAppearance,leafappearance,flowerAppearance) {
         super(scene);
         this.rows = rows;
         this.cols = cols;
@@ -13,6 +14,9 @@ export class MyGarden extends CGFobject {
         this.semiSphere = semiSphere;
         this.cilinder = cilinder;
         this.triangle = triangle;
+        this.petal_stemAppearance = petal_stemAppearance;
+        this.flowerAppearance = flowerAppearance;
+        this.leaf = new MyLeaf(scene,cilinder,triangle, 20, leafappearance);
         this.tubeHeight = 3;
         this.NumberOfTubes = 3;
         this.flowers = [];
@@ -40,7 +44,10 @@ export class MyGarden extends CGFobject {
                     this.sphere,
                     this.cilinder,
                     this.semiSphere,
-                    this.triangle
+                    this.triangle,
+                    this.petal_stemAppearance,
+                    this.leaf,
+                    this.flowerAppearance
                 )
             );
         }

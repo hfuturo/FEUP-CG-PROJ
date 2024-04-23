@@ -1,4 +1,4 @@
-import { CGFobject } from '../lib/CGF.js';
+import { CGFobject , CGFappearance, CGFtexture } from '../lib/CGF.js';
 import { MyPetal } from './MyPetal.js';
 import { MyReceptacle } from './MyReceptacle.js';
 import { MyStem } from './MyStem.js';
@@ -9,14 +9,15 @@ import { generateRandomNumber } from './utils.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFlower extends CGFobject {
-	constructor(scene, slices, stacks, numberOfTubes, tubeHeight, petalSize, numberOfPetals, receptacleRadius, stemRadius, sphere, cilinder, semiSphere, triangle) {
+	constructor(scene, slices, stacks, numberOfTubes, tubeHeight, petalSize, numberOfPetals, receptacleRadius, stemRadius, sphere, cilinder, semiSphere, triangle, petal_stemAppearance, leaf, flowerAppearance) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
         this.petalSize = petalSize;
         this.numberOfPetals = numberOfPetals;
-        // this.numberOfPetals = 4;
         this.receptacleRadius = receptacleRadius;
+        this.petal_stemAppearance = petal_stemAppearance;
+        this.flowerAppearance = flowerAppearance;
   
         // angulo que os 2 triangulos fazem entre si
         this.petalRotationAngle = generateRandomNumber(10, 50);
@@ -40,10 +41,9 @@ export class MyFlower extends CGFobject {
         this.stemColors = ["#004b23", "#006400", "#007200", "#008000", "#38b000", "#70e000", "#9ef01a", "#ccff33"];
         this.stemColor = this.getRandomColor(this.stemColors);
         
-        this.stem = new MyStem(scene, this.slices, this.stacks, numberOfTubes, tubeHeight, stemRadius, this.stemColor,cilinder,semiSphere,triangle);
-        this.receptacle = new MyReceptacle(scene, sphere);
+        this.stem = new MyStem(scene, this.slices, this.stacks, numberOfTubes, tubeHeight, stemRadius, this.stemColor,cilinder,semiSphere,leaf,petal_stemAppearance);
+        this.receptacle = new MyReceptacle(scene, sphere, this.receptacleRadius);
         this.petal = new MyPetal(scene, triangle, this.petalRotationAngle);
-
 		this.initBuffers();
 	}
 
@@ -53,17 +53,17 @@ export class MyFlower extends CGFobject {
         
         // stem
         this.scene.pushMatrix();
+        this.petal_stemAppearance.apply();
         this.scene.setAmbient(...this.stemColor);
         this.scene.setDiffuse(...this.stemColor);
         this.scene.setSpecular(...this.stemColor);
-        
         this.stem.display();
         this.scene.popMatrix();
 
         // receptacle
         this.scene.pushMatrix();
+        this.flowerAppearance.apply();
         this.scene.translate(this.stem.finalx, this.stem.finaly, this.stem.finalz);
-        this.scene.scale(this.receptacleRadius, this.receptacleRadius, this.receptacleRadius);
         this.scene.setAmbient(...this.receptacleColor);
         this.scene.setDiffuse(...this.receptacleColor);
         this.scene.setSpecular(...this.receptacleColor);
@@ -95,16 +95,13 @@ export class MyFlower extends CGFobject {
             
             // tamanho das petalas
             this.scene.scale(this.petalSize / 2, this.petalSize, this.petalSize / 2);
-
+            this.petal_stemAppearance.apply();
             this.scene.setAmbient(...this.petalColor);
             this.scene.setDiffuse(...this.petalColor);
             this.scene.setSpecular(...this.petalColor);
             this.petal.display();
-
             this.scene.popMatrix();
         }
-
-		this.initGLBuffers();
 	}
 
     enableNormalViz() {
@@ -121,7 +118,6 @@ export class MyFlower extends CGFobject {
 
 	updateBuffers(complexity) {
 		this.slices = 3 + Math.round(9 * complexity); //complexity varies 0-1, so slices varies 3-12
-
 		// reinitialize buffers
 		this.initBuffers();
 		this.initNormalVizBuffers();
