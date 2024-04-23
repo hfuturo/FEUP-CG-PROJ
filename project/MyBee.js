@@ -1,4 +1,5 @@
 import { CGFappearance, CGFobject, CGFtexture } from "../lib/CGF.js";
+import { MyAnimatedWings } from "./MyAnimatedWings.js";
 import { MyCilinder } from "./MyCilinder.js";
 import { MyPetal } from "./MyPetal.js";
 import { MySphere } from "./MySphere.js";
@@ -12,7 +13,7 @@ export class MyBee extends CGFobject {
 
         this.sphere = new MySphere(this.scene, this.slices, this.stacks, false, true);
         this.cilinder = new MyCilinder(this.scene, this.slices, this.stacks);
-        this.wing = new MyPetal(this.scene, 50);
+        // this.wing = new MyPetal(this.scene, 50);
 
         this.bodyMaterial = new CGFappearance(this.scene);
         this.bodyMaterial.setAmbient(1, 1, 0, 0.0);
@@ -37,10 +38,12 @@ export class MyBee extends CGFobject {
         this.wingsMaterial.setSpecular(220/255, 220/255, 220/255, 0);
         this.wingsMaterial.setEmission(220/255, 220/255, 220/255, 0.3)
 
+        this.wingsAnimation = new MyAnimatedWings(this.scene, 50);
+
         this.initBuffers();
     }
 
-    display(gl) {
+    display(gl, elapsed) {
         const deg2rad = Math.PI/180.0;
 
         // cabeça
@@ -106,7 +109,9 @@ export class MyBee extends CGFobject {
 
             this.scene.scale(0.4, 0.85, 0.4);
             this.wingsMaterial.apply();
-            this.wing.display();
+            // this.wing.display();
+            this.wingsAnimation.update(elapsed)
+            this.wingsAnimation.display();
             this.scene.popMatrix();
         }
 
