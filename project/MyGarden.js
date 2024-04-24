@@ -1,10 +1,9 @@
 import { CGFobject } from "../lib/CGF.js";
 import { MyFlower } from "./MyFlower.js";
 import { generateRandomNumber } from "./utils.js";
-import { MyLeaf } from "./MyLeaf.js";
 
 export class MyGarden extends CGFobject {
-    constructor(scene, slices, stacks, rows, cols,sphere,cilinder,semiSphere,triangle,petal_stemAppearance,leafappearance,flowerAppearance) {
+    constructor(scene, slices, stacks, rows, cols,sphere,cilinder,semiSphere,triangle,petal_stemAppearance,leafAppearance,flowerAppearance) {
         super(scene);
         this.rows = rows;
         this.cols = cols;
@@ -16,9 +15,7 @@ export class MyGarden extends CGFobject {
         this.triangle = triangle;
         this.petal_stemAppearance = petal_stemAppearance;
         this.flowerAppearance = flowerAppearance;
-        this.leaf = new MyLeaf(scene,cilinder,triangle, 20, leafappearance);
-        this.tubeHeight = 3;
-        this.NumberOfTubes = 3;
+        this.leafAppearance = leafAppearance;
         this.flowers = [];
         this.numFlowers = rows * cols;
         this.initBuffers();
@@ -27,26 +24,28 @@ export class MyGarden extends CGFobject {
     initBuffers(){
         for (let i = 0; i < this.numFlowers; i++) {
             const numberOfPetals = generateRandomNumber(15, 10);
-            const petalSize = 1 + generateRandomNumber(5, 1) * 0.1; // 1
             const receptacleRadius = 1 + generateRandomNumber(5, 1) * 0.1; // 1
             const stemRadius = generateRandomNumber(3, 1) * 0.1; // 0.2
+            const flowerRadius = generateRandomNumber(23, 20) * 0.1;
+            const tubeHeight = generateRandomNumber(4, 2);
+            const NumberOfTubes = generateRandomNumber(5, 3);
             this.flowers.push(
                 new MyFlower(
                     this.scene,
                     this.slices,
                     this.stacks,
-                    this.NumberOfTubes,
-                    this.tubeHeight,
-                    petalSize,
+                    NumberOfTubes,
+                    tubeHeight,
                     numberOfPetals,
                     receptacleRadius,
                     stemRadius,
+                    flowerRadius,
                     this.sphere,
                     this.cilinder,
                     this.semiSphere,
                     this.triangle,
+                    this.leafAppearance,
                     this.petal_stemAppearance,
-                    this.leaf,
                     this.flowerAppearance
                 )
             );

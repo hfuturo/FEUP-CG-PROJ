@@ -5,7 +5,7 @@ import {CGFobject, CGFappearance, CGFtexture} from '../lib/CGF.js';
  * @param scene - Reference to MyScene object
  */
 export class MyLeaf extends CGFobject {
-	constructor(scene, cilinder, triangle, rotationAngle, appearance) {
+	constructor(scene, cilinder, triangle, rotationAngle, appearance, leafColor) {
 		super(scene);
 		
 		this.triangle = triangle;
@@ -13,6 +13,7 @@ export class MyLeaf extends CGFobject {
 
 		this.rotationAngle = rotationAngle;
 		this.appearance = appearance;
+		this.leafColor = leafColor;
 		this.initBuffers();
 	}
 	
@@ -28,6 +29,9 @@ export class MyLeaf extends CGFobject {
 		// upwards triangle
 		this.scene.pushMatrix();
 		this.appearance.apply();
+		this.scene.setAmbient(...this.leafColor);
+		this.scene.setDiffuse(...this.leafColor);
+		this.scene.setSpecular(...this.leafColor);
 		this.scene.translate(0, 0, 1);
 		this.scene.rotate(deg2rad * -90, 1, 0, 0);
 		this.scene.scale(0.5,1,1);
@@ -37,6 +41,9 @@ export class MyLeaf extends CGFobject {
 		// downwards triangle
 		this.scene.pushMatrix();
 		this.appearance.apply();
+		this.scene.setAmbient(...this.leafColor);
+		this.scene.setDiffuse(...this.leafColor);
+		this.scene.setSpecular(...this.leafColor);
 		this.scene.translate(0, 0, 1);
 		this.scene.rotate(deg2rad * (90 + this.rotationAngle), 1, 0, 0);
 		this.scene.scale(0.5,1,1);

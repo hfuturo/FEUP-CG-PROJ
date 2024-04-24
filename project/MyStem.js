@@ -9,14 +9,14 @@ import { generateRandomNumber } from "./utils.js";
  * @param scene - Reference to MyScene object
  */
 export class MyStem extends CGFobject {
-	constructor(scene, slices, stacks ,numberOfTubes, height, radius, color,cilinder,semiSphere,leaf,petal_stemAppearance) {
+	constructor(scene, slices, stacks ,numberOfTubes, height, radius, stemColor,cilinder,semiSphere,leaf,petal_stemAppearance) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks;
 		this.numberOfTubes = numberOfTubes;
 		this.height = height;
 		this.radius = radius;
-		this.color = color;
+		this.stemColor = stemColor;
 		this.semiSphere = semiSphere;
 		this.leaf = leaf;
 		this.petal_stemAppearance = petal_stemAppearance;
@@ -43,7 +43,7 @@ export class MyStem extends CGFobject {
 		
 		// deg2rad
 		/*
-		// First Cylinder
+		 First Cylinder
 		this.scene.pushMatrix();
 		let frontFirstRotation = Math.PI-Math.PI/8
 		this.scene.rotate(frontFirstRotation,1,0,0)
@@ -104,9 +104,9 @@ export class MyStem extends CGFobject {
 				
 				this.scene.pushMatrix();
 				this.petal_stemAppearance.apply();
-				this.scene.setAmbient(...this.color);
-				this.scene.setDiffuse(...this.color);
-				this.scene.setSpecular(...this.color);
+				this.scene.setAmbient(...this.stemColor);
+				this.scene.setDiffuse(...this.stemColor);
+				this.scene.setSpecular(...this.stemColor);
 				this.scene.translate(this.finalx, this.finaly, this.finalz);
 				this.scene.scale(this.radius, this.radius, this.radius);
 				this.semiSphere.display();
