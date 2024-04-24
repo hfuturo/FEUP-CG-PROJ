@@ -32,6 +32,7 @@ export class MyScene extends CGFscene {
 
     //Objects connected to MyInterface
     this.displayAxis = true;
+    this.displayBee = true;
     this.scaleFactor = 1;
     this.Slices = 16;
     this.Stacks = 10;
@@ -68,8 +69,7 @@ export class MyScene extends CGFscene {
   update(t) {
     // animação contínua baseada no tempo atual e app start time
     const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
-    this.beeVal = -2 + 2 * Math.sin(timeSinceAppStart * Math.PI * 3);
-    this.animObjs[0].update(timeSinceAppStart);
+    this.bee.update(timeSinceAppStart);
   }
 
   initLights() {
@@ -149,11 +149,12 @@ export class MyScene extends CGFscene {
     this.panorama.display();
     this.popMatrix();
     
-    // this.pushMatrix();  
-    // this.bee.display(this.gl);
-    // this.popMatrix();
+    if (this.displayBee) {
+      this.pushMatrix();  
+      this.bee.display();
+      this.popMatrix();
+    }
 
-    this.animObjs[0].display(this.gl);
     // ---- END Primitive drawing section
   }
 

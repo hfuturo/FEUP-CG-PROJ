@@ -1,9 +1,8 @@
 import { MyBee } from "./MyBee.js";
 
 export class MyAnimatedBee {
-    constructor(scene, slices, stacks, s=3, e=4, st=0, d=0.5) {
+    constructor(scene, s=3, e=4, st=0, d=0.5) {
         this.scene = scene;
-        this.bee = new MyBee(scene, slices, stacks);
 
         this.startVal = s;
         this.endVal = e;
@@ -42,10 +41,7 @@ export class MyAnimatedBee {
         }
     }
 
-    display(gl) {
-        this.scene.pushMatrix();
-        this.scene.translate(0, this.animVal, 0);
-        this.bee.display(gl, this.lastElapsedTime);
-        this.scene.popMatrix();
+    getVal() {
+        return this.animVal;
     }
 }

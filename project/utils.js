@@ -22,3 +22,5 @@ export function hexToRgbA(hex) {
         ];
     return ret;
 }
+
+export const deg2rad = Math.PI/180.0;

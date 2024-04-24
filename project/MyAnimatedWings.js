@@ -1,9 +1,8 @@
-import { MyPetal } from "./MyPetal.js";
+import { deg2rad } from "./utils.js";
 
 export class MyAnimatedWings {
-    constructor(scene, rotationAngle, s=3, e=4, st=0, d=0.1) {
+    constructor(scene, s=3, e=4, st=0, d=0.15) {
         this.scene = scene;
-        this.wings = new MyPetal(scene, rotationAngle);
 
         this.startVal = s;
         this.endVal = e;
@@ -42,11 +41,7 @@ export class MyAnimatedWings {
         }
     }
 
-    display() {
-        const deg2rad = Math.PI/180.0;
-        this.scene.pushMatrix();
-        this.scene.rotate(deg2rad * this.animVal * 10, 1, 0, 0);
-        this.wings.display();
-        this.scene.popMatrix();
+    getVal() {
+        return deg2rad * this.animVal * 0.7;
     }
 }
