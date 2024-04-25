@@ -7,14 +7,14 @@ import { MySphere } from "./MySphere.js";
 import { deg2rad, hexToRgbA } from "./utils.js";
 
 export class MyBee extends CGFobject {
-    constructor(scene, slices, stacks) {
+    constructor(scene, slices, stacks, wing) {
         super(scene);
         this.slices = slices;
         this.stacks = stacks;
 
         this.sphere = new MySphere(this.scene, this.slices, this.stacks, false, true);
         this.cilinder = new MyCilinder(this.scene, this.slices, this.stacks);
-        this.wing = new MyPetal(this.scene, 50);
+        this.wing = wing;
 
         this.bodyMaterial = new CGFappearance(this.scene);
         this.bodyMaterial.setAmbient(1, 1, 0, 0.0);

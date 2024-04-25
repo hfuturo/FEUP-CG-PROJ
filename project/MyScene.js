@@ -67,7 +67,7 @@ export class MyScene extends CGFscene {
     this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
     this.triangle = new MyTriangle(this);
     this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle,this.petal_stemAppearance,this.leafappearance,this.flowerAppearance);
-    this.bee = new MyBee(this, this.Slices, this.Stacks);
+    this.bee = new MyBee(this, this.Slices, this.Stacks, this.triangle);
     this.enableTextures(true);
 
     // animações
@@ -230,6 +230,7 @@ export class MyScene extends CGFscene {
     this.plane.display();
     this.popMatrix();
 
+    this.pushMatrix();
     this.panorama.display();
     this.popMatrix();
     
