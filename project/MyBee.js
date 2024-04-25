@@ -34,25 +34,44 @@ export class MyBee extends CGFobject {
         this.head.setSpecular(...hexToRgbA("#FAD369"));
 
         this.wingsMaterial = new CGFappearance(this.scene);
-        this.wingsMaterial.setAmbient(220/255, 220/255, 220/255, 0.2);
-        this.wingsMaterial.setDiffuse(220/255, 220/255, 220/255, 0.2);
-        this.wingsMaterial.setSpecular(220/255, 220/255, 220/255, 0.2);
-        this.wingsMaterial.setEmission(220/255, 220/255, 220/255, 0.2)
+        this.wingsMaterial.setAmbient(220/255, 220/255, 220/255, 0);
+        this.wingsMaterial.setDiffuse(220/255, 220/255, 220/255, 0);
+        this.wingsMaterial.setSpecular(220/255, 220/255, 220/255, 0);
+        this.wingsMaterial.setEmission(220/255, 220/255, 220/255, 0.6);
+        this.wingsMaterial.setTexture(new CGFtexture(this.scene, "images/wing.jpg"));
+        this.wingsMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
         this.beeAnimation = new MyAnimatedBee(this.scene);
         this.wingsAnimation = new MyAnimatedWings(this.scene, 50);
+
+        // posição
+        this.pos = {
+            x: 0,
+            y: 3,
+            z: 0,
+        };
+
+        // angulo em torno do eixo yy
+        this.orientation = 0;
+
+        // vetor velocidade
+        this.velocity = {
+            x: 0,
+            y: 0,
+            z: 0,
+        };
 
         this.initBuffers();
     }
 
     display() {
         this.scene.pushMatrix();
-        this.scene.translate(0, this.y, 0);
+        this.scene.translate(this.pos.x, this.pos.y, this.pos.z);
+        this.scene.scale(this.scene.scaleFactor, this.scene.scaleFactor, this.scene.scaleFactor);
+        this.scene.rotate(this.orientation, 0, 1, 0);
         this.displayHead();
         this.displayAbdomen();
         this.displayLegs();
-        this.scene.gl.blendFunc(this.scene.gl.SRC_ALPHA, this.scene.gl.ONE_MINUS_SRC_ALPHA);
-        this.scene.gl.enable(this.scene.gl.BLEND);
         this.displayWings();
         this.scene.popMatrix();
 
@@ -115,6 +134,9 @@ export class MyBee extends CGFobject {
     }
 
     displayWings() {
+        this.scene.gl.blendFunc(this.scene.gl.SRC_ALPHA, this.scene.gl.ONE_MINUS_SRC_ALPHA);
+        this.scene.gl.enable(this.scene.gl.BLEND);
+
         for (let i = 0; i < 2; i++) {
             this.scene.pushMatrix();
 
@@ -133,10 +155,33 @@ export class MyBee extends CGFobject {
         }
     }
 
+    turn(v) {
+        this.orientation += v * deg2rad * this.scene.speedFactor;
+    }
+    
+    accelerate(v) {
+        this.velocity.x += Math.min(0.1, v * -Math.cos(this.orientation));
+        this.velocity.z += Math.min(0.1, v * Math.sin(this.orientation));
+    }
+
+    reset() {
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        this.velocity.z = 0;
+        this.pos.x = 0;
+        this.pos.y = 3;
+        this.pos.z = 0;
+        this.orientation = 0;
+    }
+
     update(timeSinceAppStart) {
-        this.beeAnimation.update(timeSinceAppStart);
+        this.beeAnimation.update(timeSinceAppStart, this.velocity);
         this.wingsAnimation.update(timeSinceAppStart);
-        this.y = this.beeAnimation.getVal();
+        this.pos.y = this.beeAnimation.getVal();
         this.rotationAngle = this.wingsAnimation.getVal();
+
+        this.pos.x += this.velocity.x * this.scene.speedFactor;
+        this.pos.y += this.velocity.y * this.scene.speedFactor;
+        this.pos.z += this.velocity.z * this.scene.speedFactor;
     }
 }

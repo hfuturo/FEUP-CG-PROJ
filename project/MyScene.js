@@ -40,6 +40,7 @@ export class MyScene extends CGFscene {
     this.displayNormals = false;
     this.gardenRows = 1;
     this.gardenCols = 1;
+    this.speedFactor = 1;
     
     //Initialize scene objects
     this.axis = new CGFaxis(this);
@@ -70,6 +71,52 @@ export class MyScene extends CGFscene {
     // animação contínua baseada no tempo atual e app start time
     const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
     this.bee.update(timeSinceAppStart);
+    this.checkKeys();
+  }
+
+  checkKeys() {
+    console.log(this.gui.activeKeys);
+    let text = "Keys pressed:";
+    let keysPressed = false;
+
+    // Check for key codes e.g. in https://keycode.info/
+    if (this.gui.isKeyPressed("KeyW")) {
+      text += " W";
+      keysPressed = true;
+      this.bee.accelerate(0.001);
+    }
+
+    if (this.gui.isKeyPressed("KeyS")) {
+      text += " S";
+      keysPressed = true;
+      this.bee.accelerate(-0.001);
+    }
+
+    if (this.gui.isKeyPressed("KeyA")) {
+      text += " A";
+      keysPressed = true;
+      this.bee.turn(2);
+    }
+
+    if (this.gui.isKeyPressed("KeyD")) {
+      text += " D";
+      keysPressed = true;
+      this.bee.turn(-2);
+    }
+
+    if (this.gui.isKeyPressed("KeyR")) {
+      text += " R";
+      keysPressed = true;
+      this.bee.reset();
+    }
+
+    if (keysPressed) {
+      console.log(text);
+    }
+    else {
+      this.bee.accelerate(0);
+      this.bee.turn(0);
+    }
   }
 
   initLights() {
@@ -119,6 +166,14 @@ export class MyScene extends CGFscene {
   updateGardenCols(gardenCols) {
     this.gardenCols = Math.round(gardenCols);
     this.garden.updateMatrix(this.gardenRows, Math.round(gardenCols));
+  }
+
+  updateSpeedFactor(speedFactor) {
+    this.speedFactor = speedFactor;
+  }
+
+  updateBeeScale(scaleFactor) {
+    this.scaleFactor = scaleFactor;
   }
 
   display() {
