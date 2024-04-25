@@ -3,43 +3,53 @@ import { MyFlower } from "./MyFlower.js";
 import { generateRandomNumber } from "./utils.js";
 
 export class MyGarden extends CGFobject {
-    constructor(scene, slices, stacks, rows, cols) {
+    constructor(scene, slices, stacks, rows, cols,sphere,cilinder,semiSphere,triangle,petal_stemAppearance,leafAppearance,flowerAppearance) {
         super(scene);
-
         this.rows = rows;
         this.cols = cols;
         this.slices = slices;
         this.stacks = stacks;
-        this.tubeHeight = 3;
-        this.NumberOfTubes = 3;
-        this.flowers = (() => {
-            const flowers = [];
-
-            for (let i = 0; i < this.rows * this.cols; i++) {
-                const numberOfPetals = generateRandomNumber(15, 10);
-                const petalSize = 1 + generateRandomNumber(5, 1) * 0.1; // 1
-                const receptacleRadius = 1 + generateRandomNumber(5, 1) * 0.1; // 1
-                const stemRadius = generateRandomNumber(3, 1) * 0.1; // 0.2
-
-                flowers.push(
-                    new MyFlower(
-                        scene,
-                        this.slices,
-                        this.stacks,
-                        this.NumberOfTubes,
-                        this.tubeHeight,
-                        petalSize,
-                        numberOfPetals,
-                        receptacleRadius,
-                        stemRadius
-                    )
-                );
-            }
-
-            return flowers;
-        })();
-
+        this.sphere = sphere;
+        this.semiSphere = semiSphere;
+        this.cilinder = cilinder;
+        this.triangle = triangle;
+        this.petal_stemAppearance = petal_stemAppearance;
+        this.flowerAppearance = flowerAppearance;
+        this.leafAppearance = leafAppearance;
+        this.flowers = [];
+        this.numFlowers = rows * cols;
         this.initBuffers();
+    }
+
+    initBuffers(){
+        for (let i = 0; i < this.numFlowers; i++) {
+            const numberOfPetals = generateRandomNumber(15, 10);
+            const receptacleRadius = 1 + generateRandomNumber(5, 1) * 0.1; // 1
+            const stemRadius = generateRandomNumber(3, 1) * 0.1; // 0.2
+            const flowerRadius = generateRandomNumber(23, 20) * 0.1;
+            const tubeHeight = generateRandomNumber(4, 2);
+            const NumberOfTubes = generateRandomNumber(5, 3);
+            this.flowers.push(
+                new MyFlower(
+                    this.scene,
+                    this.slices,
+                    this.stacks,
+                    NumberOfTubes,
+                    tubeHeight,
+                    numberOfPetals,
+                    receptacleRadius,
+                    stemRadius,
+                    flowerRadius,
+                    this.sphere,
+                    this.cilinder,
+                    this.semiSphere,
+                    this.triangle,
+                    this.leafAppearance,
+                    this.petal_stemAppearance,
+                    this.flowerAppearance
+                )
+            );
+        }
     }
 
     display() {
@@ -58,8 +68,6 @@ export class MyGarden extends CGFobject {
                 this.scene.popMatrix();
             }
         }
-
-        this.initGLBuffers();
     }
 
     updateMatrix(rows, cols) {
@@ -72,26 +80,8 @@ export class MyGarden extends CGFobject {
         if (diff < 0) {
             this.flowers.splice(this.flowers.length + diff, -diff);
         } else if (diff > 0) {
-            for (let i = 0; i < diff; i++) {
-                const numberOfPetals = generateRandomNumber(15, 10);
-                const petalSize = 1 + generateRandomNumber(5, 1) * 0.1; // 1
-                const receptacleRadius = 1 + generateRandomNumber(5, 1) * 0.1; // 1
-                const stemRadius = generateRandomNumber(3, 1) * 0.1; // 0.2
-
-                this.flowers.push(
-                    new MyFlower(
-                        this.scene,
-                        this.slices,
-                        this.stacks,
-                        this.NumberOfTubes,
-                        this.tubeHeight,
-                        petalSize,
-                        numberOfPetals,
-                        receptacleRadius,
-                        stemRadius
-                    )
-                );
-            }
+            this.numFlowers = diff;
+            this.initBuffers();
         }
 
         this.rows = rows;

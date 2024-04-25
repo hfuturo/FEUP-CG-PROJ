@@ -4,13 +4,11 @@ import { CGFobject } from '../lib/CGF.js';
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MySphere extends CGFobject {
-	constructor(scene, slices, stacks, insideOut = false, putTextures = false) {
+export class MySemiSphere extends CGFobject {
+	constructor(scene, slices, stacks) {
 		super(scene);
 		this.slices = slices;
 		this.stacks = stacks * 2;
-        this.insideOut = insideOut;
-        this.putTextures = putTextures;
 		this.initBuffers();
 	}
 
@@ -18,18 +16,16 @@ export class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-
-        if (this.putTextures) 
-            this.texCoords = [];
+        this.texCoords = [];
     
         const alphaAng = 2 * Math.PI / this.slices; // horizontal angle increment
-        const betaAng = Math.PI / this.stacks; // vertical angle increment
+        const betaAng = Math.PI / (this.stacks ); // vertical angle increment
 
-        const alphaIncrement = 1 / this.slices;
-        const betaIncrement = 1 / this.stacks;
+        const alphaIncrement = 1 / (this.stacks );
+        const betaIncrement = 1 / (this.stacks );
         let beta = 0;
 
-        for(let i = 0; i <= this.stacks; i++) {
+        for(let i = 2 * this.stacks / 5; i <= this.stacks * 3 / 5; i++) {
             const sinBeta = Math.sin(i * betaAng);
             const cosBeta = Math.cos(i * betaAng);
             
@@ -46,38 +42,26 @@ export class MySphere extends CGFobject {
     
                 // add the vertex to the array
                 this.vertices.push(x, y, z);
-                
-                if (this.insideOut) {
-                    this.normals.push(-x, -y, -z);
-                }
-                else{
-                    // the normal is the same as the vertex for a unit sphere
-                    this.normals.push(x, y, z);
-                }
+                // the normal is the same as the vertex for a unit sphere
+                this.normals.push(x, y, z);
 
-                // add textures
-                if (this.putTextures)
-                    this.texCoords.push(alpha, beta);
-
+                this.texCoords.push(360-alpha, beta);
                 alpha += alphaIncrement;
             }
             beta += betaIncrement;
         }
     
         // calculate indices
-        for(let i = 0; i < this.stacks; i++) {
+        for(let i = 0; i < (this.stacks * 3 / 5-2 * this.stacks / 5); i++) {
             for(let j = 0; j < this.slices; j++) {
                 const first = i * (this.slices + 1) + j;
                 const second = first + this.slices + 1;
     
                 // create the two triangles that make up each square in the grid
-                if (this.insideOut) {
-                    this.indices.push(second, first + 1, first);
-                    this.indices.push(second, second + 1, first + 1);
-                } else {
+
                     this.indices.push(first + 1, second, first);
                     this.indices.push(second + 1, second, first + 1);
-                }
+                
             }
         }
     
