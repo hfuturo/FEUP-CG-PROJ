@@ -3,6 +3,7 @@ import { MyPlane } from "./MyPlane.js";
 import { MySphere } from "./MySphere.js";
 import { MyPanorama } from "./MyPanorama.js"
 import { MyGarden } from "./MyGarden.js";
+import { MyBee } from "./MyBee.js";
 import { MySemiSphere } from "./MySemiSphere.js";
 import { MyCilinder } from "./MyCilinder.js";
 import { MyTriangle } from "./MyTriangle.js";
@@ -31,6 +32,7 @@ export class MyScene extends CGFscene {
 
     //Objects connected to MyInterface
     this.displayAxis = true;
+    this.displayBee = true;
     this.scaleFactor = 1;
     this.Slices = 16;
     this.Stacks = 10;
@@ -38,6 +40,7 @@ export class MyScene extends CGFscene {
     this.displayNormals = false;
     this.gardenRows = 1;
     this.gardenCols = 1;
+    this.speedFactor = 1;
 
     this.appearance = new CGFappearance(this);
     this.appearance.setTexture(new CGFtexture(this, "images/grass.png"));
@@ -64,8 +67,69 @@ export class MyScene extends CGFscene {
     this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
     this.triangle = new MyTriangle(this);
     this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle,this.petal_stemAppearance,this.leafappearance,this.flowerAppearance);
+    this.bee = new MyBee(this, this.Slices, this.Stacks);
     this.enableTextures(true);
+
+    // animações
+    this.setUpdatePeriod(10);
+
+    this.appStartTime = Date.now();
+
+    this.beeVal = 0;
   }
+
+  update(t) {
+    // animação contínua baseada no tempo atual e app start time
+    const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
+    this.bee.update(timeSinceAppStart);
+    this.checkKeys();
+  }
+
+  checkKeys() {
+    console.log(this.gui.activeKeys);
+    let text = "Keys pressed:";
+    let keysPressed = false;
+
+    // Check for key codes e.g. in https://keycode.info/
+    if (this.gui.isKeyPressed("KeyW")) {
+      text += " W";
+      keysPressed = true;
+      this.bee.accelerate(0.001);
+    }
+
+    if (this.gui.isKeyPressed("KeyS")) {
+      text += " S";
+      keysPressed = true;
+      this.bee.accelerate(-0.001);
+    }
+
+    if (this.gui.isKeyPressed("KeyA")) {
+      text += " A";
+      keysPressed = true;
+      this.bee.turn(2);
+    }
+
+    if (this.gui.isKeyPressed("KeyD")) {
+      text += " D";
+      keysPressed = true;
+      this.bee.turn(-2);
+    }
+
+    if (this.gui.isKeyPressed("KeyR")) {
+      text += " R";
+      keysPressed = true;
+      this.bee.reset();
+    }
+
+    if (keysPressed) {
+      console.log(text);
+    }
+    else {
+      this.bee.accelerate(0);
+      this.bee.turn(0);
+    }
+  }
+
   initLights() {
     this.lights[0].setPosition(-30, 100, 30, 1);
     this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
@@ -86,6 +150,8 @@ export class MyScene extends CGFscene {
     this.lights[2].enable();
     this.lights[2].update();
   }
+
+
   initCameras() {
     this.camera = new CGFcamera(
       2,
@@ -127,6 +193,14 @@ export class MyScene extends CGFscene {
     this.garden.updateMatrix(this.gardenRows, Math.round(gardenCols));
   }
 
+  updateSpeedFactor(speedFactor) {
+    this.speedFactor = speedFactor;
+  }
+
+  updateBeeScale(scaleFactor) {
+    this.scaleFactor = scaleFactor;
+  }
+
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
@@ -157,6 +231,13 @@ export class MyScene extends CGFscene {
     this.popMatrix();
 
     this.panorama.display();
+    this.popMatrix();
+    
+    if (this.displayBee) {
+      this.pushMatrix();  
+      this.bee.display();
+      this.popMatrix();
+    }
 
     this.pushMatrix();
     this.appearance.apply();
@@ -166,4 +247,5 @@ export class MyScene extends CGFscene {
 
     // ---- END Primitive drawing section
   }
+
 }
