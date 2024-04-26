@@ -7,6 +7,8 @@ import { MyBee } from "./MyBee.js";
 import { MySemiSphere } from "./MySemiSphere.js";
 import { MyCilinder } from "./MyCilinder.js";
 import { MyTriangle } from "./MyTriangle.js";
+import { MyRockSet } from "./MyRockSet.js";
+import { MyRock } from "./MyRock.js";
 
 /**
  * MyScene
@@ -58,6 +60,10 @@ export class MyScene extends CGFscene {
     this.flowerAppearance.setTexture(new CGFtexture(this, "images/flower.jpg"));
     this.flowerAppearance.setTextureWrap('REPEAT', 'REPEAT');
 
+    this.rockAppearance = new CGFappearance(this);
+    this.rockAppearance.setTexture(new CGFtexture(this, "images/rock.jpg"));
+    this.rockAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this, 30);
@@ -67,6 +73,8 @@ export class MyScene extends CGFscene {
     this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
     this.triangle = new MyTriangle(this);
     this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle,this.petal_stemAppearance,this.leafappearance,this.flowerAppearance);
+    this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
+    this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.triangle);
     this.enableTextures(true);
 
@@ -86,7 +94,7 @@ export class MyScene extends CGFscene {
   }
 
   checkKeys() {
-    console.log(this.gui.activeKeys);
+    //console.log(this.gui.activeKeys);
     let text = "Keys pressed:";
     let keysPressed = false;
 
@@ -239,6 +247,18 @@ export class MyScene extends CGFscene {
       this.bee.display();
       this.popMatrix();
     }
+    
+    this.pushMatrix();
+    this.translate(20, -50, 20);
+    this.rockAppearance.apply();
+    this.rockSet.display();
+    this.popMatrix();
+
+    this.pushMatrix();
+    this.translate(30, -49, 21);
+    this.rock.display();
+    this.popMatrix();
+    
 
     this.pushMatrix();
     this.appearance.apply();
