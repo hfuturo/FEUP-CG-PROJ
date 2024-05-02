@@ -61,6 +61,7 @@ export class MyRock extends CGFobject {
                 // create the two triangles that make up each square in the grid
                 this.indices.push(first + 1, second, first);
                 this.indices.push(second + 1, second, first + 1);
+                
             }
         }
         this.primitiveType = this.scene.gl.TRIANGLES;
