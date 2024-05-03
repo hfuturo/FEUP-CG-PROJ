@@ -9,6 +9,7 @@ import { MyCilinder } from "./MyCilinder.js";
 import { MyTriangle } from "./MyTriangle.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyRock } from "./MyRock.js";
+import { MyCircle } from "./MyCircle.js";
 
 /**
  * MyScene
@@ -72,10 +73,11 @@ export class MyScene extends CGFscene {
     this.semiSphere = new MySemiSphere(this, this.Slices, this.Stacks);
     this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
     this.triangle = new MyTriangle(this);
+    this.circle = new MyCircle(this, 50);
     this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle,this.petal_stemAppearance,this.leafappearance,this.flowerAppearance);
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
-    this.bee = new MyBee(this, this.Slices, this.Stacks, this.triangle);
+    this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
     this.enableTextures(true);
 
     // animações
@@ -165,8 +167,8 @@ export class MyScene extends CGFscene {
       2,
       0.1,
       1000,
-      vec3.fromValues(2, -25, 2),
-      vec3.fromValues(0, -50, 0)
+      vec3.fromValues(0, 0, 2),
+      vec3.fromValues(0, 0, 0)
     );
   }
 

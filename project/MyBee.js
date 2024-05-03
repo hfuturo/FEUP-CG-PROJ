@@ -1,10 +1,7 @@
 import { CGFappearance, CGFobject, CGFtexture } from "../lib/CGF.js";
 import { MyAnimatedBee } from "./MyAnimatedBee.js";
 import { MyAnimatedWings } from "./MyAnimatedWings.js";
-import { MyCilinder } from "./MyCilinder.js";
-import { MyPetal } from "./MyPetal.js";
-import { MySphere } from "./MySphere.js";
-import { deg2rad, hexToRgbA } from "./utils.js";
+import { deg2rad } from "./utils.js";
 
 export class MyBee extends CGFobject {
     constructor(scene, slices, stacks, wing) {
@@ -12,26 +9,21 @@ export class MyBee extends CGFobject {
         this.slices = slices;
         this.stacks = stacks;
 
-        this.sphere = new MySphere(this.scene, this.slices, this.stacks, false, true);
-        this.cilinder = new MyCilinder(this.scene, this.slices, this.stacks);
+        this.sphere = this.scene.sphere;
+        this.cilinder = this.scene.cilinder;
         this.wing = wing;
 
         this.bodyMaterial = new CGFappearance(this.scene);
         this.bodyMaterial.setAmbient(1, 1, 0, 0.0);
         this.bodyMaterial.setDiffuse(1, 1, 0, 0.0);
         this.bodyMaterial.setSpecular(1, 1, 0, 0.0);
-        this.bodyMaterial.setTexture(new CGFtexture(this.scene, "images/bee.webp"));
+        this.bodyMaterial.setTexture(new CGFtexture(this.scene, "images/bee.avif"));
         this.bodyMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
         this.dark = new CGFappearance(this.scene);
         this.dark.setAmbient(0, 0, 0, 0.0);
         this.dark.setDiffuse(0, 0, 0, 0.0);
         this.dark.setSpecular(0, 0, 0, 0.0);
-
-        this.head = new CGFappearance(this.scene);
-        this.head.setAmbient(...hexToRgbA("#FAD369"));
-        this.head.setDiffuse(...hexToRgbA("#FAD369"));
-        this.head.setSpecular(...hexToRgbA("#FAD369"));
 
         this.wingsMaterial = new CGFappearance(this.scene);
         this.wingsMaterial.setAmbient(220/255, 220/255, 220/255, 0);
@@ -70,6 +62,7 @@ export class MyBee extends CGFobject {
         this.scene.scale(this.scene.scaleFactor, this.scene.scaleFactor, this.scene.scaleFactor);
         this.scene.rotate(this.orientation, 0, 1, 0);
         this.displayHead();
+        this.displayTorax();
         this.displayAbdomen();
         this.displayLegs();
         this.displayWings();
@@ -80,30 +73,66 @@ export class MyBee extends CGFobject {
 
     displayHead() {
         this.scene.pushMatrix();
-        this.scene.scale(0.3, 0.35, 0.3);
-        this.head.apply();
+        this.scene.rotate(deg2rad * -25, 0, 0, 1);
+        this.scene.scale(0.3, 0.4, 0.3);
+        this.bodyMaterial.apply();
         this.sphere.display();
         this.scene.popMatrix();
 
+        this.displayAntennas();
         this.displayEyes();
+    }
+
+    displayAntennas() {
+        for (let i = 0; i < 2; i++) {
+            // juntas ao corpo
+            this.scene.pushMatrix();
+            this.scene.translate(-0.1, 0.3, 0.05 - 0.1 * i);
+            this.scene.rotate(deg2rad * 45, 0, 0, 1);
+            this.scene.scale(0.01, 0.2, 0.01);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(-0.23, 0.44, 0.05 - 0.1 * i);
+            this.scene.rotate(deg2rad * 135, 0, 0, 1);
+            this.scene.scale(0.01, 0.2, 0.01);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+        }
     }
 
     displayEyes() {
         for (let i = 0; i < 2; i++) {
             this.scene.pushMatrix();
-            this.scene.translate(-0.25, 0.15, 0.1 - 0.2 * i);
-            this.scene.scale(0.05, 0.07, 0.05);
+            this.scene.translate(-0.17, 0.15, 0.2 - 0.4 * i);
+            this.scene.rotate(deg2rad * -25, 0, 0, 1);  // rotacao para ficar com angulo da cabeça
+            this.scene.rotate(deg2rad * (30 - 60 * i), 0, 1, 0); // rotacao para "encaixar" na cabeça
+            this.scene.scale(0.05, 0.2, 0.1);
             this.dark.apply();
             this.sphere.display();
             this.scene.popMatrix();
         }
     }
 
+    displayTorax() {
+        this.scene.pushMatrix();
+        this.scene.translate(0.65, 0, 0);
+        this.scene.scale(0.4, 0.4, 0.4);
+        this.scene.rotate(deg2rad * 90, 0, 0, 1);
+        this.bodyMaterial.apply();
+        this.sphere.display();
+        this.scene.popMatrix();
+    }
+
     displayAbdomen() {
         this.scene.pushMatrix();
-        this.scene.translate(0.7, 0, 0);
-        this.scene.scale(0.8, 0.35, 0.35);
+        this.scene.translate(1.55, -0.2, 0);
+        this.scene.rotate(deg2rad * -20, 0, 0, 1);
         this.scene.rotate(deg2rad * 90, 0, 0, 1);
+        this.scene.scale(0.35, 0.6, 0.35);
         this.bodyMaterial.apply();
         this.sphere.display();
         this.scene.popMatrix();
@@ -111,25 +140,89 @@ export class MyBee extends CGFobject {
 
     displayLegs() {
         for (let i = 0; i < 2; i++) {
-            for (let j = 0; j < 2; j++) {
-                // pernas junto ao corpo
-                this.scene.pushMatrix();
-                this.scene.translate(0.5 + 0.5 * i, 0, 0.2 - 0.4 * j);
-                this.scene.rotate(deg2rad * (105 - 210 * j), 1, 0, 0);
-                this.scene.scale(0.03, 0.45, 0.03);
-                this.dark.apply();
-                this.cilinder.display();
-                this.scene.popMatrix();
+            // pernas da frente
+            this.scene.pushMatrix();
+            this.scene.translate(0.5, 0, 0.1 - 0.2 * i);
+            this.scene.rotate(deg2rad * (-30 + 60 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (150 - 300 * i), 1, 0, 0); // aponta para baixo
+            this.scene.scale(0.03, 0.45, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
 
-                // outras pernas
-                this.scene.pushMatrix();
-                this.scene.translate(0.5 + 0.5 * i, -0.09, 0.62 - 1.24 * j);
-                this.scene.rotate(deg2rad * (170 - 340 * j), 1, 0, 0);
-                this.scene.scale(0.03, 0.45, 0.03);
-                this.dark.apply();
-                this.cilinder.display();
-                this.scene.popMatrix();
-            }
+            this.scene.pushMatrix();
+            this.scene.translate(0.401, -0.39, 0.27 - 0.54 * i);
+            this.scene.rotate(deg2rad * (-30 + 60 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (50 - 100 * i), 1, 0, 0);
+            this.scene.scale(0.03, 0.15, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(0.35, -0.3, 0.35 - 0.7 * i);
+            this.scene.rotate(deg2rad * (-30 + 60 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (150 - 300 * i), 1, 0, 0); // aponta para baixo
+            this.scene.scale(0.03, 0.30, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            // pernas do meio
+            this.scene.pushMatrix();
+            this.scene.translate(0.7, -0.1, 0.1 - 0.2 * i);
+            this.scene.rotate(deg2rad * (-15 + 30 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (150 - 300 * i), 1, 0, 0); // aponta para baixo
+            this.scene.scale(0.03, 0.45, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(0.651, -0.5, 0.3 - 0.6 * i);
+            this.scene.rotate(deg2rad * (-15 + 30 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (50 - 100 * i), 1, 0, 0);
+            this.scene.scale(0.03, 0.15, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(0.63, -0.40, 0.38 - 0.76 * i);
+            this.scene.rotate(deg2rad * (-15 + 30 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (150 - 300 * i), 1, 0, 0); // aponta para baixo
+            this.scene.scale(0.03, 0.30, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            // pernas de tras
+            this.scene.pushMatrix();
+            this.scene.translate(0.7, -0.1, 0.1 - 0.2 * i);
+            this.scene.rotate(deg2rad * (15 - 30 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (150 - 300 * i), 1, 0, 0); // aponta para baixo
+            this.scene.scale(0.03, 0.45, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(0.751, -0.5, 0.3 - 0.6 * i);
+            this.scene.rotate(deg2rad * (15 - 30 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (50 - 100 * i), 1, 0, 0);
+            this.scene.scale(0.03, 0.15, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(0.77, -0.40, 0.38 - 0.76 * i);
+            this.scene.rotate(deg2rad * (15 - 30 * i), 0, 1, 0);   // aponta para a frente
+            this.scene.rotate(deg2rad * (150 - 300 * i), 1, 0, 0); // aponta para baixo
+            this.scene.scale(0.03, 0.30, 0.03);
+            this.dark.apply();
+            this.cilinder.display();
+            this.scene.popMatrix();
         }
     }
 
@@ -138,17 +231,30 @@ export class MyBee extends CGFobject {
         this.scene.gl.enable(this.scene.gl.BLEND);
 
         for (let i = 0; i < 2; i++) {
+            let rotAngle = this.rotationAngle;
+            if (i % 2 !== 0) 
+                rotAngle *= -1;
+
+            // asas da frente
             this.scene.pushMatrix();
+            this.scene.translate(0.6, 0, -0.1 + 0.2 * i);
+            this.scene.rotate(rotAngle, 1, 0, 0);
+            this.scene.rotate(deg2rad * (170 - 340 * i), 0, 1, 0);
+            this.scene.rotate(deg2rad * (70 - 140 * i), 1, 0, 0);
+            this.scene.scale(0.3, 0.75, 0.3);
+            this.scene.translate(0, 1, 0);
+            this.wingsMaterial.apply();
+            this.wing.display();
+            this.scene.popMatrix();
 
-            this.scene.translate(0.4, 0.1, 0.2 - 0.4 * i);
-
-            this.scene.rotate((-130 + 80 * i) * deg2rad, 0, 1, 0)
-
-            // mete para baixo
-            this.scene.rotate(70 * deg2rad, -1, 0, 0);
-
-            this.scene.scale(0.4, 0.85, 0.4);
-            this.scene.rotate(this.rotationAngle, 1, 0, 0);
+            // asas de tras
+            this.scene.pushMatrix();
+            this.scene.translate(0.6, 0, -0.1 + 0.2 * i);
+            this.scene.rotate(rotAngle, 1, 0, 0);
+            this.scene.rotate(deg2rad * (140 - 280 * i), 0, 1, 0);
+            this.scene.rotate(deg2rad * (70 - 140 * i), 1, 0, 0);
+            this.scene.scale(0.3, 0.75, 0.3);
+            this.scene.translate(0, 1, 0);
             this.wingsMaterial.apply();
             this.wing.display();
             this.scene.popMatrix();
