@@ -263,6 +263,12 @@ export class MyBee extends CGFobject {
 
     turn(v) {
         this.orientation += v * deg2rad * this.scene.speedFactor;
+
+        const norm = Math.sqrt(this.velocity.x ** 2 + this.velocity.z ** 2);
+
+        // atualiza vetor de velocidade para o movimento da abelha acompanhar a rotação
+        this.velocity.x = Math.min(0.1, norm * -Math.cos(this.orientation));
+        this.velocity.z = Math.min(0.1, norm * Math.sin(this.orientation));
     }
     
     accelerate(v) {
@@ -286,8 +292,6 @@ export class MyBee extends CGFobject {
             this.velocity.x += Math.min(0.1, v * -Math.cos(this.orientation));
             this.velocity.z += Math.min(0.1, v * Math.sin(this.orientation));
         }
-
-        console.log(this.velocity)
     }
 
     reset() {
