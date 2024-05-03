@@ -266,8 +266,28 @@ export class MyBee extends CGFobject {
     }
     
     accelerate(v) {
-        this.velocity.x += Math.min(0.1, v * -Math.cos(this.orientation));
-        this.velocity.z += Math.min(0.1, v * Math.sin(this.orientation));
+        // desacelera até parar
+        if (v < 0) {
+            if (this.velocity.x > 0) {
+                this.velocity.x -= Math.max(0, v * Math.cos(this.orientation));
+            }
+            else {
+                this.velocity.x += Math.max(0, -v * Math.cos(this.orientation));
+            }
+
+            if (this.velocity.z > 0) {
+                this.velocity.z -= Math.max(0, -v * Math.sin(this.orientation));
+            }
+            else {
+                this.velocity.z += Math.max(0, v * Math.sin(this.orientation));
+            }
+        }
+        else {
+            this.velocity.x += Math.min(0.1, v * -Math.cos(this.orientation));
+            this.velocity.z += Math.min(0.1, v * Math.sin(this.orientation));
+        }
+
+        console.log(this.velocity)
     }
 
     reset() {
