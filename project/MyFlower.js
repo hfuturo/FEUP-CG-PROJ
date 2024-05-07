@@ -51,7 +51,36 @@ export class MyFlower extends CGFobject {
             z: this.receptacleRadius * Math.sin(deg2rad * generateRandomNumber(360)),
         }
 
+        this.pos = {
+            x: 0,
+            z: 0
+        };
+
         this.initBuffers();
+    }
+
+    getPos() {
+        return this.pos;
+    }
+
+    setPos(pos) {
+        this.pos = pos;
+    }
+
+    getReceptacleRadius() {
+        return this.receptacleRadius;
+    }
+
+    getStemPos() {
+        return [this.stem.finalx, this.stem.finaly, this.stem.finalz];
+    }
+
+    getPollen() {
+        return this.pollen;
+    }
+
+    removePollen() {
+        this.pollen = null;
     }
 
     display() {
@@ -76,11 +105,13 @@ export class MyFlower extends CGFobject {
         this.scene.popMatrix();
 
         // pollen
-        this.scene.pushMatrix();
-        // multiplica por 0.7 por causa da escala de y do pollen (0.5) + margem para nao ficar "dentro" da esfera por causa da rotacao
-        this.scene.translate(this.stem.finalx + (this.receptacleRadius * this.pollenRandomPlacement.x * 0.7), this.stem.finaly + this.receptacleRadius * 0.7, this.stem.finalz + (this.receptacleRadius * this.pollenRandomPlacement.z * 0.7));
-        this.pollen.display();
-        this.scene.popMatrix();
+        if (this.pollen != null) {
+            this.scene.pushMatrix();
+            // multiplica por 0.7 por causa da escala de y do pollen (0.5) + margem para nao ficar "dentro" da esfera por causa da rotacao
+            this.scene.translate(this.stem.finalx + (this.receptacleRadius * this.pollenRandomPlacement.x * 0.7), this.stem.finaly + this.receptacleRadius * 0.7, this.stem.finalz + (this.receptacleRadius * this.pollenRandomPlacement.z * 0.7));
+            this.pollen.display();
+            this.scene.popMatrix();
+        }
 
         let angleIncremenet = 360.0 / this.numberOfPetals;
 

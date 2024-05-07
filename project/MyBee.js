@@ -39,7 +39,7 @@ export class MyBee extends CGFobject {
         // posição
         this.pos = {
             x: 0,
-            y: 3,
+            y: 30,
             z: 0,
         };
 
@@ -55,13 +55,23 @@ export class MyBee extends CGFobject {
 
         // se olha descer/subir para de fazer a animação
         this.stopAnim = false;
+        this.collision = false;
+        this.pollen = null;
 
         this.initBuffers();
     }
 
+    getPos() {
+        return this.pos;
+    }
+
+    setCollision(collision) {
+        this.collision = collision;
+    }
+
     display() {
         this.scene.pushMatrix();
-        this.scene.translate(this.pos.x, this.pos.y, this.pos.z);
+        this.scene.translate(this.pos.x, this.pos.y - 30, this.pos.z);
         this.scene.scale(this.scene.scaleFactor, this.scene.scaleFactor, this.scene.scaleFactor);
         this.scene.rotate(this.orientation, 0, 1, 0);
         this.displayHead();
@@ -69,6 +79,8 @@ export class MyBee extends CGFobject {
         this.displayAbdomen();
         this.displayLegs();
         this.displayWings();
+        if (this.pollen != null)
+            this.displayPollen();
         this.scene.popMatrix();
 
         this.initGLBuffers();
@@ -264,11 +276,29 @@ export class MyBee extends CGFobject {
         }
     }
 
-    verticalAcceleration(y) {
+    displayPollen() {
+        this.scene.pushMatrix();
+        this.scene.translate(0.5, -0.7, 0);
+        this.bodyMaterial.apply();
+        this.pollen.display();
+        this.scene.popMatrix();
+    }
+
+    verticalAcceleration(y, pollen = null) {
         this.velocity.y += y * this.scene.speedFactor;
 
         if (y !== 0)
             this.stopAnim = true;
+
+        console.log("y", y);
+
+        if (y > 0) {
+            this.collision = false;
+
+            if (pollen != null) {
+                this.pollen = pollen;
+            }
+        }
     }
 
     turn(v) {
@@ -309,9 +339,11 @@ export class MyBee extends CGFobject {
         this.velocity.y = 0;
         this.velocity.z = 0;
         this.pos.x = 0;
-        this.pos.y = 3;
+        this.pos.y = 30;
         this.pos.z = 0;
         this.orientation = 0;
+        this.stopAnim = false;
+        this.collision = false;
     }
 
     update(timeSinceAppStart) {
@@ -321,13 +353,22 @@ export class MyBee extends CGFobject {
         
         this.wingsAnimation.update(timeSinceAppStart);
 
-        this.pos.y = this.beeAnimation.getVal();
+        const yVal = this.beeAnimation.getVal();
+
+        if (!this.collision)
+            this.pos.y = yVal;
 
         this.rotationAngle = this.wingsAnimation.getVal();
 
-        this.pos.x += this.velocity.x * this.scene.speedFactor;
-        this.pos.y += this.velocity.y;
-        this.pos.z += this.velocity.z * this.scene.speedFactor;
+        
+        if (!this.collision) {
+            this.pos.x += this.velocity.x * this.scene.speedFactor;
+            this.pos.y += this.velocity.y;
+            this.pos.z += this.velocity.z * this.scene.speedFactor;
+        } else {
+            this.velocity.x = 0;
+            this.velocity.z = 0;
+        }
 
         this.stopAnim = false;
     }

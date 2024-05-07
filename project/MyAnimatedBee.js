@@ -1,7 +1,5 @@
-import { MyBee } from "./MyBee.js";
-
 export class MyAnimatedBee {
-    constructor(scene, s=3, e=4, st=0, d=0.5) {
+    constructor(scene, s=30, e=31, st=0, d=0.5) {
         this.scene = scene;
 
         this.startVal = s;

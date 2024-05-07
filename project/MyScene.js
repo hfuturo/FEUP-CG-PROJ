@@ -36,6 +36,7 @@ export class MyScene extends CGFscene {
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.displayBee = true;
+    this.beePov = false;
     this.scaleFactor = 1;
     this.Slices = 16;
     this.Stacks = 10;
@@ -78,6 +79,8 @@ export class MyScene extends CGFscene {
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
+    this.flowerPollen = null;
+
     this.enableTextures(true);
 
     // animações
@@ -95,10 +98,42 @@ export class MyScene extends CGFscene {
     this.checkKeys();
   }
 
+  checkCollision() {
+
+    const beePos = this.bee.getPos();
+
+    this.garden.getFlowers().forEach((flower) => {
+      const receptacleRadius = flower.getReceptacleRadius();
+      const [_stemX, stemY, _stemZ] = flower.getStemPos();
+      const pos = flower.getPos();
+
+      const beeDistanceToRecptacle = Math.sqrt(
+       (beePos.z - pos.z) ** 2 +
+       (beePos.y - stemY) ** 2 +
+       (beePos.x - pos.x) ** 2
+      );
+
+      if (beeDistanceToRecptacle <= receptacleRadius + 1) {
+        this.bee.setCollision(true);
+        const pollen = flower.getPollen();
+        if (pollen != null) {
+          this.flowerPollen = Object.assign(pollen);
+          flower.removePollen();
+        }
+      }
+      
+    });
+
+  }
+
   checkKeys() {
     //console.log(this.gui.activeKeys);
     let text = "Keys pressed:";
     let keysPressed = false;
+
+    if (this.beePov) {
+      this.updateCamera();
+    }
 
     // Check for key codes e.g. in https://keycode.info/
     if (this.gui.isKeyPressed("KeyW")) {
@@ -129,12 +164,13 @@ export class MyScene extends CGFscene {
       text += " F";
       keysPressed = true;
       this.bee.verticalAcceleration(-0.2);
+      this.checkCollision();
     }
 
     if (this.gui.isKeyPressed("KeyP")) {
       text += " P";
       keysPressed = true;
-      this.bee.verticalAcceleration(0.2);
+      this.bee.verticalAcceleration(0.2, this.flowerPollen);
     }
 
 
@@ -225,6 +261,11 @@ export class MyScene extends CGFscene {
     this.scaleFactor = scaleFactor;
   }
 
+  updateCamera() {
+    this.camera.setTarget(vec3.fromValues(this.bee.pos.x, this.bee.pos.y - 50, this.bee.pos.z));
+    this.camera.setPosition(vec3.fromValues(this.bee.pos.x + 10, this.bee.pos.y - 50, this.bee.pos.z));
+  }
+
   display() {
     // ---- BEGIN Background, camera and axis setup
     // Clear image and depth buffer everytime we update the scene
@@ -244,6 +285,10 @@ export class MyScene extends CGFscene {
       this.popMatrix();
     }
 
+    if (this.beePov) {
+      this.updateCamera();
+    }
+
     // ---- BEGIN Primitive drawing section
 
     this.pushMatrix();
@@ -259,7 +304,8 @@ export class MyScene extends CGFscene {
     this.popMatrix();
     
     if (this.displayBee) {
-      this.pushMatrix();  
+      this.pushMatrix();
+      this.translate(0, -20, 0);
       this.bee.display();
       this.popMatrix();
     }

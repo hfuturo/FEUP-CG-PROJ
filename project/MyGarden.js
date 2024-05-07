@@ -52,6 +52,10 @@ export class MyGarden extends CGFobject {
         }
     }
 
+    getFlowers() {
+        return this.flowers;
+    }
+
     display() {
         const firstRowPos = Math.round(this.rows / 2) * 7;
         const firstColPos = Math.round(this.cols / 2) * 7;
@@ -65,6 +69,10 @@ export class MyGarden extends CGFobject {
                     firstColPos - (row + 1) * 7
                 );
                 this.flowers[row * this.cols + col].display();
+                this.flowers[row * this.cols + col].setPos({
+                    x: firstRowPos - (col + 1) * 7, 
+                    z: firstColPos - (row + 1) * 7
+                });
                 this.scene.popMatrix();
             }
         }
