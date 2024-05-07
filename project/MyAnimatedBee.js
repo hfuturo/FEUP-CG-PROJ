@@ -21,8 +21,10 @@ export class MyAnimatedBee {
         return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
     }
 
-    update(timeSinceAppStart, velocity) {
-        const elapsedTimeSecs = (timeSinceAppStart - this.animStartTimeSecs) % this.animDurationSecs;
+    update(timeSinceAppStart, speedFactor) {
+        const animDuration = this.animDurationSecs * 1 / speedFactor;
+
+        const elapsedTimeSecs = (timeSinceAppStart - this.animStartTimeSecs) % animDuration;
 
         // se elapsed time atual for menor que anterior, significa que animação recomeçou e é necessário mudar direção do movimento
         if (elapsedTimeSecs < this.lastElapsedTime) {
@@ -31,12 +33,12 @@ export class MyAnimatedBee {
 
         this.lastElapsedTime = elapsedTimeSecs;
 
-        if (elapsedTimeSecs >= 0 && elapsedTimeSecs <= this.animDurationSecs) {
+        if (elapsedTimeSecs >= 0 && elapsedTimeSecs <= animDuration) {
             if (this.moveUp) {
-                this.animVal = (this.startVal - this.length) + (this.easeInOutQuad(elapsedTimeSecs / this.animDurationSecs) * this.length) * 2;
+                this.animVal = (this.startVal - this.length) + (this.easeInOutQuad(elapsedTimeSecs / animDuration) * this.length) * 2;
             }
             else {
-                this.animVal = ((this.startVal + this.length) - (this.easeInOutQuad(elapsedTimeSecs / this.animDurationSecs) * this.length) * 2);
+                this.animVal = ((this.startVal + this.length) - (this.easeInOutQuad(elapsedTimeSecs / animDuration) * this.length) * 2);
             }
         }
     }

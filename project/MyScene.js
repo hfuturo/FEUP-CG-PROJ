@@ -125,6 +125,19 @@ export class MyScene extends CGFscene {
       this.bee.turn(-2);
     }
 
+    if (this.gui.isKeyPressed("KeyF")) {
+      text += " F";
+      keysPressed = true;
+      this.bee.verticalAcceleration(-0.2);
+    }
+
+    if (this.gui.isKeyPressed("KeyP")) {
+      text += " P";
+      keysPressed = true;
+      this.bee.verticalAcceleration(0.2);
+    }
+
+
     if (this.gui.isKeyPressed("KeyR")) {
       text += " R";
       keysPressed = true;
@@ -137,6 +150,7 @@ export class MyScene extends CGFscene {
     else {
       this.bee.accelerate(0);
       this.bee.turn(0);
+      this.bee.verticalAcceleration(0);
     }
   }
 
@@ -167,8 +181,8 @@ export class MyScene extends CGFscene {
       2,
       0.1,
       1000,
-      vec3.fromValues(0, 0, 2),
-      vec3.fromValues(0, 0, 0)
+      vec3.fromValues(0, -35, 10),
+      vec3.fromValues(0, -35, 0)
     );
   }
 

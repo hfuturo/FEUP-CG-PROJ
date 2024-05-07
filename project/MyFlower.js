@@ -2,9 +2,10 @@ import { CGFobject } from '../lib/CGF.js';
 import { MyPetal } from './MyPetal.js';
 import { MyReceptacle } from './MyReceptacle.js';
 import { MyStem } from './MyStem.js';
-import { generateRandomNumber } from './utils.js';
+import { deg2rad, generateRandomNumber } from './utils.js';
 
 import { MyLeaf } from "./MyLeaf.js";
+import { MyPollen } from './MyPollen.js';
 /**
  * MyFlower
  * @constructor
@@ -43,6 +44,13 @@ export class MyFlower extends CGFobject {
         this.stem = new MyStem(scene, this.slices, this.stacks, numberOfTubes, tubeHeight, stemRadius, this.stemColor, cilinder, semiSphere, this.leaf, petal_stemAppearance);
         this.receptacle = new MyReceptacle(scene, sphere, this.receptacleRadius);
         this.petal = new MyPetal(scene, triangle, this.petalRotationAngle, this.petalSize);
+        this.pollen = new MyPollen(scene, sphere, 0.25 + 0.01 * generateRandomNumber(10), deg2rad * generateRandomNumber(360), [generateRandomNumber(1), generateRandomNumber(1), generateRandomNumber(1)]);
+
+        this.pollenRandomPlacement = {
+            x: this.receptacleRadius * Math.cos(deg2rad * generateRandomNumber(360)),
+            z: this.receptacleRadius * Math.sin(deg2rad * generateRandomNumber(360)),
+        }
+
         this.initBuffers();
     }
 
@@ -65,6 +73,13 @@ export class MyFlower extends CGFobject {
         this.scene.setDiffuse(...this.receptacleColor);
         this.scene.setSpecular(...this.receptacleColor);
         this.receptacle.display();
+        this.scene.popMatrix();
+
+        // pollen
+        this.scene.pushMatrix();
+        // multiplica por 0.7 por causa da escala de y do pollen (0.5) + margem para nao ficar "dentro" da esfera por causa da rotacao
+        this.scene.translate(this.stem.finalx + (this.receptacleRadius * this.pollenRandomPlacement.x * 0.7), this.stem.finaly + this.receptacleRadius * 0.7, this.stem.finalz + (this.receptacleRadius * this.pollenRandomPlacement.z * 0.7));
+        this.pollen.display();
         this.scene.popMatrix();
 
         let angleIncremenet = 360.0 / this.numberOfPetals;

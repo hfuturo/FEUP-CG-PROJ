@@ -53,6 +53,9 @@ export class MyBee extends CGFobject {
             z: 0,
         };
 
+        // se olha descer/subir para de fazer a animação
+        this.stopAnim = false;
+
         this.initBuffers();
     }
 
@@ -261,6 +264,13 @@ export class MyBee extends CGFobject {
         }
     }
 
+    verticalAcceleration(y) {
+        this.velocity.y += y * this.scene.speedFactor;
+
+        if (y !== 0)
+            this.stopAnim = true;
+    }
+
     turn(v) {
         this.orientation += v * deg2rad * this.scene.speedFactor;
 
@@ -305,13 +315,20 @@ export class MyBee extends CGFobject {
     }
 
     update(timeSinceAppStart) {
-        this.beeAnimation.update(timeSinceAppStart, this.velocity);
+
+        if (!this.stopAnim)
+            this.beeAnimation.update(timeSinceAppStart, this.scene.speedFactor);
+        
         this.wingsAnimation.update(timeSinceAppStart);
+
         this.pos.y = this.beeAnimation.getVal();
+
         this.rotationAngle = this.wingsAnimation.getVal();
 
         this.pos.x += this.velocity.x * this.scene.speedFactor;
-        this.pos.y += this.velocity.y * this.scene.speedFactor;
+        this.pos.y += this.velocity.y;
         this.pos.z += this.velocity.z * this.scene.speedFactor;
+
+        this.stopAnim = false;
     }
 }
