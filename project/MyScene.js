@@ -10,6 +10,7 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyRock } from "./MyRock.js";
 import { MyCircle } from "./MyCircle.js";
+import { MyGrassBlade } from "./MyGrassBlade.js";
 
 /**
  * MyScene
@@ -79,12 +80,15 @@ export class MyScene extends CGFscene {
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
+    this.grassBlade = new MyGrassBlade(this,4,10,2);
+    this.grassShader = new CGFshader(this.gl, "shaders/grass.vert", "shaders/grass.frag"),
+    this.grassShader.setUniformsValues({ timeFactor: 0 });
     this.flowerPollen = null;
 
     this.enableTextures(true);
 
     // animações
-    this.setUpdatePeriod(10);
+    this.setUpdatePeriod(0.000001);
 
     this.appStartTime = Date.now();
 
@@ -93,6 +97,7 @@ export class MyScene extends CGFscene {
 
   update(t) {
     // animação contínua baseada no tempo atual e app start time
+    this.grassShader.setUniformsValues({ timeFactor: (t - this.appStartTime) / 1000.0 });
     const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
     this.bee.update(timeSinceAppStart);
     this.checkKeys();
@@ -313,21 +318,27 @@ export class MyScene extends CGFscene {
     this.pushMatrix();
     this.translate(20, -50, 20);
     this.rockAppearance.apply();
-    this.rockSet.display();
+    //this.rockSet.display();
     this.popMatrix();
 
     this.pushMatrix();
-    this.translate(30, -49, 21);
-    this.rock.display();
+    this.translate(0, -49, 0);
+    //this.rock.display();
     this.popMatrix();
     
 
     this.pushMatrix();
     this.appearance.apply();
     this.translate(0, -50, 0);
-    this.garden.display();
+    //this.garden.display();
     this.popMatrix();
 
+    this.setActiveShader(this.grassShader);
+    this.pushMatrix();
+    this.translate(0, -50 , 0);
+    this.grassBlade.display();
+    this.popMatrix();
+    this.setActiveShader(this.defaultShader)
     // ---- END Primitive drawing section
   }
 
