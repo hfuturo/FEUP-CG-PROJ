@@ -58,11 +58,21 @@ export class MyBee extends CGFobject {
         this.collision = false;
         this.pollen = null;
 
+        this.goingToHive = false;
+
         this.initBuffers();
     }
 
     getPos() {
         return this.pos;
+    }
+
+    getPollen() {
+        return this.pollen;
+    }
+
+    removePollen() {
+        this.pollen = null;
     }
 
     setCollision(collision) {
@@ -290,8 +300,6 @@ export class MyBee extends CGFobject {
         if (y !== 0)
             this.stopAnim = true;
 
-        console.log("y", y);
-
         if (y > 0) {
             this.collision = false;
 
@@ -334,7 +342,31 @@ export class MyBee extends CGFobject {
         }
     }
 
+    goToHive(hivePos) {
+        if (this.pollen == null) return;
+
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        this.velocity.z = 0;
+
+        const distanceX = hivePos.x - this.pos.x;
+        const distanceY = hivePos.y - this.pos.y;
+        const distanceZ = hivePos.z - this.pos.z;
+        const distance = Math.sqrt(distanceX**2 + distanceY**2 + distanceZ**2);
+
+        this.stopAnim = true;
+        this.goingToHive = true;
+
+        this.velocity.x += (distanceX / distance) / 10;
+        this.velocity.y += (distanceY / distance) / 10;
+        this.velocity.z += (distanceZ / distance) / 10;
+
+        // abelha a pontar para colmeia
+        this.orientation = Math.atan2((distanceZ / distance), -(distanceX / distance));
+    }
+
     reset() {
+        this.beeAnimation.setStartVal(30);
         this.velocity.x = 0;
         this.velocity.y = 0;
         this.velocity.z = 0;
@@ -353,10 +385,14 @@ export class MyBee extends CGFobject {
         
         this.wingsAnimation.update(timeSinceAppStart);
 
-        const yVal = this.beeAnimation.getVal();
-
-        if (!this.collision)
+        if (!this.collision && !this.goingToHive) {
+            const yVal = this.beeAnimation.getVal();
             this.pos.y = yVal;
+        }
+
+        if (this.goingToHive) {
+            this.beeAnimation.setStartVal(this.pos.y);
+        }
 
         this.rotationAngle = this.wingsAnimation.getVal();
 

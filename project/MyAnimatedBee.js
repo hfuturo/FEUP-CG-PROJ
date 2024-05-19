@@ -44,4 +44,11 @@ export class MyAnimatedBee {
     getVal() {
         return this.animVal;
     }
+
+    setStartVal(startVal) {
+        this.startVal = startVal;
+        this.endVal = startVal + 1;
+        this.length = this.startVal - this.endVal;
+        this.animVal = this.startVal;
+    }
 }

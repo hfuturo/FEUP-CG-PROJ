@@ -10,7 +10,9 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyRock } from "./MyRock.js";
 import { MyCircle } from "./MyCircle.js";
-import { MyGrass } from "./MyGrass.js";
+import { MyGrassBlade } from "./MyGrassBlade.js";
+import { MyHive } from "./MyHive.js";
+import { MyUnitCubeQuad } from "./MyUnitCubeQuad.js";
 
 /**
  * MyScene
@@ -37,6 +39,7 @@ export class MyScene extends CGFscene {
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.displayBee = true;
+    this.displayHive = true;
     this.beePov = false;
     this.scaleFactor = 1;
     this.Slices = 16;
@@ -76,13 +79,15 @@ export class MyScene extends CGFscene {
     this.cilinder = new MyCilinder(this, this.Slices, this.Stacks);
     this.triangle = new MyTriangle(this);
     this.circle = new MyCircle(this, 50);
+    this.cube = new MyUnitCubeQuad(this);
     this.garden = new MyGarden(this, this.Slices, this.Stacks, this.gardenRows, this.gardenCols, this.sphere, this.cilinder, this.semiSphere, this.triangle,this.petal_stemAppearance,this.leafappearance,this.flowerAppearance);
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
-    this.grass = new MyGrass(this,4,100,100);
+    this.grassBlade = new MyGrassBlade(this,4,10,2);
     this.grassShader = new CGFshader(this.gl, "shaders/grass.vert", "shaders/grass.frag"),
     this.grassShader.setUniformsValues({ timeFactor: 0 });
+    this.hive = new MyHive(this, this.cube);
     this.flowerPollen = null;
 
     this.enableTextures(true);
@@ -101,9 +106,10 @@ export class MyScene extends CGFscene {
     const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
     this.bee.update(timeSinceAppStart);
     this.checkKeys();
+    this.checkHiveCollision();
   }
 
-  checkCollision() {
+  checkFlowerCollision() {
 
     const beePos = this.bee.getPos();
 
@@ -131,8 +137,34 @@ export class MyScene extends CGFscene {
 
   }
 
+  checkHiveCollision() {
+    const beePos = this.bee.getPos();
+    const hivePos = this.hive.getPos();
+
+    const distanceX = hivePos.x - beePos.x;
+    const distanceY = hivePos.y - beePos.y;
+    const distanceZ = hivePos.z - beePos.z;
+    const distance = Math.sqrt(distanceX**2 + distanceY**2 + distanceZ**2);
+
+    if (distance < 5) {
+      const pollen = this.bee.getPollen();
+
+      if (pollen == null) {
+        this.bee.setCollision(false);
+        return;
+      }
+
+      this.bee.goingToHive = false;
+      this.bee.setCollision(true);
+      this.flowerPollen = pollen;
+      this.bee.removePollen();
+      this.hive.addPollen(this.flowerPollen);
+      this.flowerPollen = null;
+      return;
+    }
+  }
+
   checkKeys() {
-    //console.log(this.gui.activeKeys);
     let text = "Keys pressed:";
     let keysPressed = false;
 
@@ -169,7 +201,7 @@ export class MyScene extends CGFscene {
       text += " F";
       keysPressed = true;
       this.bee.verticalAcceleration(-0.2);
-      this.checkCollision();
+      this.checkFlowerCollision();
     }
 
     if (this.gui.isKeyPressed("KeyP")) {
@@ -178,6 +210,11 @@ export class MyScene extends CGFscene {
       this.bee.verticalAcceleration(0.2, this.flowerPollen);
     }
 
+    if (this.gui.isKeyPressed("KeyO")) {
+      text += " O";
+      keysPressed = true;
+      this.bee.goToHive(this.hive.getPos());
+    }
 
     if (this.gui.isKeyPressed("KeyR")) {
       text += " R";
@@ -222,8 +259,10 @@ export class MyScene extends CGFscene {
       2,
       0.1,
       1000,
-      vec3.fromValues(0, -35, 10),
-      vec3.fromValues(0, -35, 0)
+      // vec3.fromValues(0, -35, 10),
+      // vec3.fromValues(0, -35, 0)
+      vec3.fromValues(0, 0, 10),
+      vec3.fromValues(0, 0, 0)
     );
   }
 
@@ -285,7 +324,8 @@ export class MyScene extends CGFscene {
     // Draw axis
     if (this.displayAxis) {
       this.pushMatrix();
-      this.translate(0, -50, 0);
+      // this.translate(0, -50, 0);
+      this.translate(0, 0, 0);
       this.axis.display();
       this.popMatrix();
     }
@@ -336,9 +376,15 @@ export class MyScene extends CGFscene {
     this.setActiveShader(this.grassShader);
     this.pushMatrix();
     this.translate(0, -50 , 0);
-    this.grass.display();
+    this.grassBlade.display();
     this.popMatrix();
     this.setActiveShader(this.defaultShader)
+
+    if (this.displayHive) {
+      this.pushMatrix();
+      this.hive.display();
+      this.popMatrix();
+    }
 
     // ---- END Primitive drawing section
   }
