@@ -19,7 +19,7 @@ void main() {
     vTextureCoord = aTextureCoord;
 	
 
-    vec4 swiveledPosition = vec4(aVertexPosition.x, aVertexPosition.y, aVertexPosition.y*aVertexPosition.y*sin(timeFactor)*0.01, 1.0);
+    vec4 swiveledPosition = vec4(aVertexPosition.x, aVertexPosition.y, aVertexPosition.y*aVertexPosition.y*sin(timeFactor)*0.02, 1.0);
 
     gl_Position = uPMatrix * uMVMatrix * swiveledPosition;
 }

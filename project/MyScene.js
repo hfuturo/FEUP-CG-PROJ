@@ -10,7 +10,7 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyRock } from "./MyRock.js";
 import { MyCircle } from "./MyCircle.js";
-import { MyGrassBlade } from "./MyGrassBlade.js";
+import { MyGrass } from "./MyGrass.js";
 
 /**
  * MyScene
@@ -48,7 +48,7 @@ export class MyScene extends CGFscene {
     this.speedFactor = 1;
 
     this.appearance = new CGFappearance(this);
-    this.appearance.setTexture(new CGFtexture(this, "images/grass.png"));
+    this.appearance.setTexture(new CGFtexture(this, "images/grass3.png"));
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
     this.petal_stemAppearance = new CGFappearance(this);
@@ -80,7 +80,7 @@ export class MyScene extends CGFscene {
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
-    this.grassBlade = new MyGrassBlade(this,4,10,2);
+    this.grass = new MyGrass(this,4,100,100);
     this.grassShader = new CGFshader(this.gl, "shaders/grass.vert", "shaders/grass.frag"),
     this.grassShader.setUniformsValues({ timeFactor: 0 });
     this.flowerPollen = null;
@@ -330,15 +330,16 @@ export class MyScene extends CGFscene {
     this.pushMatrix();
     this.appearance.apply();
     this.translate(0, -50, 0);
-    //this.garden.display();
+    this.garden.display();
     this.popMatrix();
 
     this.setActiveShader(this.grassShader);
     this.pushMatrix();
     this.translate(0, -50 , 0);
-    this.grassBlade.display();
+    this.grass.display();
     this.popMatrix();
     this.setActiveShader(this.defaultShader)
+
     // ---- END Primitive drawing section
   }
 
