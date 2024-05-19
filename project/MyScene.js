@@ -153,7 +153,6 @@ export class MyScene extends CGFscene {
         this.bee.setCollision(false);
         return;
       }
-
       this.bee.goingToHive = false;
       this.bee.setCollision(true);
       this.flowerPollen = pollen;
