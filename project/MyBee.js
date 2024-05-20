@@ -295,10 +295,9 @@ export class MyBee extends CGFobject {
     }
 
     verticalAcceleration(y, pollen = null) {
-        this.velocity.y += y * this.scene.speedFactor;
+        if (this.collision && y < 0) return;
 
-        if (y !== 0)
-            this.stopAnim = true;
+        this.velocity.y += y * this.scene.speedFactor;
 
         if (y > 0) {
             this.collision = false;
@@ -379,13 +378,10 @@ export class MyBee extends CGFobject {
     }
 
     update(timeSinceAppStart) {
-
-        if (!this.stopAnim)
-            this.beeAnimation.update(timeSinceAppStart, this.scene.speedFactor);
-        
         this.wingsAnimation.update(timeSinceAppStart);
 
-        if (!this.collision && !this.goingToHive) {
+        if (!this.collision && !this.goingToHive && !this.stopAnim) {
+            this.beeAnimation.update(timeSinceAppStart, this.scene.speedFactor);
             const yVal = this.beeAnimation.getVal();
             this.pos.y = yVal;
         }
