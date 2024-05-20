@@ -146,7 +146,7 @@ export class MyScene extends CGFscene {
     const distanceZ = hivePos.z - beePos.z;
     const distance = Math.sqrt(distanceX**2 + distanceY**2 + distanceZ**2);
 
-    if (distance < 5) {
+    if (distance < 10) {
       const pollen = this.bee.getPollen();
 
       if (pollen == null) {
