@@ -241,23 +241,25 @@ export class MyScene extends CGFscene {
   }
 
   initLights() {
-    this.lights[0].setPosition(-30, 100, 30, 1);
+    this.lights[0].setPosition(100, 100, 0, 1);
     this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
-    //this.lights[0].setLinearAttenuation(0.00005);
-    this.lights[0].enable();
+    this.lights[0].disable();
+    this.lights[0].setVisible(true);
     this.lights[0].update();
-    this.lights[1].setPosition(-15,  100, 5, 1);
+
+    this.lights[1].setPosition(-100, 100, 0, 1);
     this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[1].setSpecular(1.0, 1.0, 1.0, 1.0);
-    //this.lights[1].setLinearAttenuation(0.00005);
-    this.lights[1].enable();
+    this.lights[1].disable();
+    this.lights[1].setVisible(true);
     this.lights[1].update();
-    this.lights[2].setPosition(0,  100, 15, 1);
+
+    this.lights[2].setPosition(0,  120, 50, 1);
     this.lights[2].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[2].setSpecular(1.0, 1.0, 1.0, 1.0);
-    //this.lights[2].setLinearAttenuation(0.00005);
-    this.lights[2].enable();
+    this.lights[2].disable();
+    this.lights[2].setVisible(true);
     this.lights[2].update();
   }
 
@@ -267,10 +269,10 @@ export class MyScene extends CGFscene {
       2,
       0.1,
       1000,
-      // vec3.fromValues(0, -35, 10),
-      // vec3.fromValues(0, -35, 0)
-      vec3.fromValues(0, 0, 10),
-      vec3.fromValues(0, 0, 0)
+      vec3.fromValues(0, -35, 10),
+      vec3.fromValues(0, -35, 0)
+      // vec3.fromValues(0, 0, 10),
+      // vec3.fromValues(0, 0, 0)
     );
   }
 
@@ -329,6 +331,10 @@ export class MyScene extends CGFscene {
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
 
+    this.lights[0].update();
+    this.lights[1].update();
+    this.lights[2].update();
+
     // Draw axis
     if (this.displayAxis) {
       this.pushMatrix();
@@ -385,13 +391,14 @@ export class MyScene extends CGFscene {
     this.garden.display();
     this.popMatrix();
 
+    /*
     this.setActiveShader(this.grassShader);
     
     this.pushMatrix();
     this.translate(0, -50 , 0);
     this.grass.display();
     this.popMatrix();
-    this.setActiveShader(this.defaultShader)
+    this.setActiveShader(this.defaultShader) */
 
     if (this.displayHive) {
       this.pushMatrix();

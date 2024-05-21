@@ -48,6 +48,27 @@ export class MyInterface extends CGFinterface {
 
         this.gui.add(this.scene, 'scaleFactor', 0.5, 3).name("Scale Bee").onChange(this.scene.updateBeeScale.bind(this.scene));
 
+        const f0 = this.gui.addFolder('Light 1 ');
+        f0.add(this.scene.lights[0], 'enabled').name("Enabled");
+        const sf0 = f0.addFolder('Light 1 Position');
+        sf0.add(this.scene.lights[0].position, '0', -200, 200).name("X Position");
+        sf0.add(this.scene.lights[0].position, '1', -200, 200).name("Y Position");
+        sf0.add(this.scene.lights[0].position, '2', -200, 200).name("Z Position");
+
+        const f1 = this.gui.addFolder('Light 2 ');
+        f1.add(this.scene.lights[1], 'enabled').name("Enabled");
+        const sf1 = f1.addFolder('Light 2 Position');
+        sf1.add(this.scene.lights[1].position, '0', -200, 200).name("X Position");
+        sf1.add(this.scene.lights[1].position, '1', -200, 200).name("Y Position");
+        sf1.add(this.scene.lights[1].position, '2', -200, 200).name("Z Position");
+
+        const f2 = this.gui.addFolder('Light 3 ');
+        f2.add(this.scene.lights[2], 'enabled').name("Enabled");
+        const sf2 = f2.addFolder('Light 3 Position');
+        sf2.add(this.scene.lights[2].position, '0', -200, 200).name("X Position");
+        sf2.add(this.scene.lights[2].position, '1', -200, 200).name("Y Position");
+        sf2.add(this.scene.lights[2].position, '2', -200, 200).name("Z Position");
+
         this.initKeys();
 
         return true;

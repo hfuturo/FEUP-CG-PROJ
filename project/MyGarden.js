@@ -18,6 +18,8 @@ export class MyGarden extends CGFobject {
         this.leafAppearance = leafAppearance;
         this.flowers = [];
         this.numFlowers = rows * cols;
+        this.offsets = [];
+
         this.initBuffers();
     }
 
@@ -49,6 +51,10 @@ export class MyGarden extends CGFobject {
                     this.flowerAppearance
                 )
             );
+            this.offsets.push({
+                x: generateRandomNumber(2, -2), 
+                z: generateRandomNumber(2, -2)
+            });
         }
     }
 
@@ -62,16 +68,20 @@ export class MyGarden extends CGFobject {
 
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
+
+                const offsetX = this.offsets[row * this.cols + col].x;
+                const offsetZ = this.offsets[row * this.cols + col].z;
+
                 this.scene.pushMatrix();
                 this.scene.translate(
-                    firstRowPos - (col + 1) * 7,
+                    firstRowPos - (col + 1) * 7 + offsetX,
                     0,
-                    firstColPos - (row + 1) * 7
+                    firstColPos - (row + 1) * 7 + offsetZ
                 );
                 this.flowers[row * this.cols + col].display();
                 this.flowers[row * this.cols + col].setPos({
-                    x: firstRowPos - (col + 1) * 7, 
-                    z: firstColPos - (row + 1) * 7
+                    x: firstRowPos - (col + 1) * 7 + offsetX, 
+                    z: firstColPos - (row + 1) * 7 + offsetZ
                 });
                 this.scene.popMatrix();
             }
@@ -87,6 +97,7 @@ export class MyGarden extends CGFobject {
 
         if (diff < 0) {
             this.flowers.splice(this.flowers.length + diff, -diff);
+            this.offsets.splice(this.offsets.length + diff, -diff);
         } else if (diff > 0) {
             this.numFlowers = diff;
             this.initBuffers();
