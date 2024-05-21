@@ -241,24 +241,24 @@ export class MyScene extends CGFscene {
   }
 
   initLights() {
-    this.lights[0].setPosition(100, 100, 0, 1);
+    this.lights[0].setPosition(0, 200, -200, 1);
     this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[0].setSpecular(1.0, 1.0, 1.0, 1.0);
-    this.lights[0].disable();
+    this.lights[0].enable();
     this.lights[0].setVisible(true);
     this.lights[0].update();
 
-    this.lights[1].setPosition(-100, 100, 0, 1);
+    this.lights[1].setPosition(150, 150, -150, 1);
     this.lights[1].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[1].setSpecular(1.0, 1.0, 1.0, 1.0);
-    this.lights[1].disable();
+    this.lights[1].enable();
     this.lights[1].setVisible(true);
     this.lights[1].update();
 
-    this.lights[2].setPosition(0,  120, 50, 1);
+    this.lights[2].setPosition(-150,  150, -150, 1);
     this.lights[2].setDiffuse(1.0, 1.0, 1.0, 1.0);
     this.lights[2].setSpecular(1.0, 1.0, 1.0, 1.0);
-    this.lights[2].disable();
+    this.lights[2].enable();
     this.lights[2].setVisible(true);
     this.lights[2].update();
   }
