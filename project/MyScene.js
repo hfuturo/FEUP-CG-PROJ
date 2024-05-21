@@ -10,7 +10,7 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyRock } from "./MyRock.js";
 import { MyCircle } from "./MyCircle.js";
-import { MyGrassBlade } from "./MyGrassBlade.js";
+import { MyGrass } from "./MyGrass.js";
 import { MyHive } from "./MyHive.js";
 import { MyUnitCubeQuad } from "./MyUnitCubeQuad.js";
 
@@ -54,6 +54,8 @@ export class MyScene extends CGFscene {
     this.appearance.setTexture(new CGFtexture(this, "images/grass3.png"));
     this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
+    this.cloudMap = new CGFtexture(this, "images/cloudMap.jpg");
+
     this.petal_stemAppearance = new CGFappearance(this);
     this.petal_stemAppearance.setTexture(new CGFtexture(this, "images/stem.png"));
     this.petal_stemAppearance.setTextureWrap('REPEAT', 'REPEAT');
@@ -84,10 +86,12 @@ export class MyScene extends CGFscene {
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
-    this.grassBlade = new MyGrassBlade(this,4,10,2);
+    this.grass = new MyGrass(this,4,50,50);
     this.grassShader = new CGFshader(this.gl, "shaders/grass.vert", "shaders/grass.frag"),
     this.grassShader.setUniformsValues({ timeFactor: 0 });
     this.hive = new MyHive(this, this.cube);
+    this.cloudShader = new CGFshader(this.gl, "shaders/clouds.vert", "shaders/clouds.frag"),
+    this.cloudShader.setUniformsValues({ timeFactor: 0, uSampler: 0, uSampler2: 1 });
     this.flowerPollen = null;
 
     this.enableTextures(true);
@@ -103,6 +107,7 @@ export class MyScene extends CGFscene {
   update(t) {
     // animação contínua baseada no tempo atual e app start time
     this.grassShader.setUniformsValues({ timeFactor: (t - this.appStartTime) / 1000.0 });
+    this.cloudShader.setUniformsValues({ timeFactor: (t - this.appStartTime) / 1000.0 });
     const timeSinceAppStart = (t - this.appStartTime) / 1000.0;
     this.bee.update(timeSinceAppStart);
     this.checkKeys();
@@ -343,9 +348,12 @@ export class MyScene extends CGFscene {
     this.plane.display();
     this.popMatrix();
 
+    this.setActiveShader(this.cloudShader);
     this.pushMatrix();
+    this.cloudMap.bind(1);
     this.panorama.display();
     this.popMatrix();
+    this.setActiveShader(this.defaultShader);
     
     if (this.displayBee) {
       this.pushMatrix();
@@ -375,7 +383,7 @@ export class MyScene extends CGFscene {
     this.setActiveShader(this.grassShader);
     this.pushMatrix();
     this.translate(0, -50 , 0);
-    this.grassBlade.display();
+    this.grass.display();
     this.popMatrix();
     this.setActiveShader(this.defaultShader)
 

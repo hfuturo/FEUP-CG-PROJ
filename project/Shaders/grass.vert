@@ -8,7 +8,7 @@ uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
 uniform float timeFactor;
 
-varying vec2 vTextureCoord;
+varying float vCoord;
 uniform sampler2D uSampler2;
 
 uniform float normScale;
@@ -16,8 +16,7 @@ uniform float normScale;
 void main() {
 	vec3 offset=vec3(0.0,0.0,0.0);
     
-    vTextureCoord = aTextureCoord;
-	
+    vCoord = aVertexPosition.y;
 
     vec4 swiveledPosition = vec4(aVertexPosition.x, aVertexPosition.y, aVertexPosition.y*aVertexPosition.y*sin(timeFactor)*0.02, 1.0);
 
