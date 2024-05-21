@@ -24,9 +24,9 @@ export class MyHive extends CGFobject {
         this.cube.setMaterial(this.hiveMaterial);
 
         this.pos = {
-            x: 0,
-            y: 60,
-            z: 0,
+            x: -25,  
+            y: 27,
+            z: -52,
         };
 
         this.initBuffers();

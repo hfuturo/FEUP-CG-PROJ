@@ -72,6 +72,10 @@ export class MyScene extends CGFscene {
     this.rockAppearance.setTexture(new CGFtexture(this, "images/rock.jpg"));
     this.rockAppearance.setTextureWrap('REPEAT', 'REPEAT');
 
+    this.grassAppearance = new CGFappearance(this);
+    this.grassAppearance.setTexture(new CGFtexture(this, "images/grassBlade.jpg"));
+    this.grassAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.plane = new MyPlane(this, 30);
@@ -86,7 +90,7 @@ export class MyScene extends CGFscene {
     this.rockSet = new MyRockSet(this, this.Slices, this.Stacks,5);
     this.rock = new MyRock(this, this.Slices, this.Stacks);
     this.bee = new MyBee(this, this.Slices, this.Stacks, this.circle);
-    this.grass = new MyGrass(this,4,50,50);
+    this.grass = new MyGrass(this,4,50,50,this.grassAppearance);
     this.grassShader = new CGFshader(this.gl, "shaders/grass.vert", "shaders/grass.frag"),
     this.grassShader.setUniformsValues({ timeFactor: 0 });
     this.hive = new MyHive(this, this.cube);
@@ -363,14 +367,15 @@ export class MyScene extends CGFscene {
     }
     
     this.pushMatrix();
-    this.translate(20, -50, 20);
+    this.translate(20, -50, -40);
     this.rockAppearance.apply();
-    //this.rockSet.display();
+    this.rockSet.display();
     this.popMatrix();
 
     this.pushMatrix();
-    this.translate(0, -49, 0);
-    //this.rock.display();
+    this.translate(-20, -49, -50);
+    this.scale(20, 20, 20);
+    this.rock.display();
     this.popMatrix();
     
 
@@ -381,6 +386,7 @@ export class MyScene extends CGFscene {
     this.popMatrix();
 
     this.setActiveShader(this.grassShader);
+    
     this.pushMatrix();
     this.translate(0, -50 , 0);
     this.grass.display();
@@ -389,6 +395,8 @@ export class MyScene extends CGFscene {
 
     if (this.displayHive) {
       this.pushMatrix();
+      this.translate(-25, -39 , -55);
+      this.scale(2,2,2)
       this.hive.display();
       this.popMatrix();
     }

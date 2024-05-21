@@ -3,7 +3,7 @@ import { MyGrassBlade } from "./MyGrassBlade.js";
 import { generateRandomNumber } from "./utils.js";
 
 export class MyGrass extends CGFobject {
-    constructor(scene, stacks, rows, cols) {
+    constructor(scene, stacks, rows, cols, bladeApearance) {
         super(scene);
         this.rows = rows;
         this.cols = cols;
@@ -12,6 +12,7 @@ export class MyGrass extends CGFobject {
         this.heights = [];
         this.widths = [];
         this.numgrassBlades = rows * cols;
+        this.bladeApearance = bladeApearance;
         // Create an array to store the random offsets
         this.offsets = new Array(rows * cols);
         this.initBuffers();
@@ -43,7 +44,7 @@ export class MyGrass extends CGFobject {
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
                 this.scene.pushMatrix();
-    
+                this.bladeApearance.apply();
                 // Get the offset from the array
                 const offsetX = this.offsets[row * this.cols + col].x;
                 const offsetZ = this.offsets[row * this.cols + col].z;
