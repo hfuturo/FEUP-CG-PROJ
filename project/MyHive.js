@@ -26,7 +26,7 @@ export class MyHive extends CGFobject {
         this.pos = {
             x: -25,  
             y: 27,
-            z: -52,
+            z: -81,
         };
 
         this.initBuffers();

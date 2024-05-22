@@ -35,9 +35,6 @@ export class MyInterface extends CGFinterface {
         //Slider element in GUI
         this.gui.add(this.scene, 'Stacks', 0.01, 1.0).name('Stacks').onChange(this.scene.updateSphereStacks.bind(this.scene));
 
-        //Checkbox for normals
-        this.gui.add(this.scene, 'displayNormals').name("Display Normals");
-
         //Slider element for Garden Rows in GUI
         this.gui.add(this.scene, 'gardenRows', 1, 15).name("Garden Rows").onChange(this.scene.updateGardenRows.bind(this.scene));
 

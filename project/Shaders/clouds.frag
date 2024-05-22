@@ -10,7 +10,7 @@ uniform float timeFactor;
 
 void main() {
 	vec4 color = texture2D(uSampler, vTextureCoord);
-	vec4 filter = texture2D(uSampler2, vTextureCoord+vec2(timeFactor*.01,timeFactor*.01));
+	vec4 filter = texture2D(uSampler2, vTextureCoord+vec2(timeFactor*.005,timeFactor*.005));
 
 	if(vTextureCoord.y<0.4 && vTextureCoord.y>0.01 && filter.b>0.7){
 		// Screen blend the color with the filter
