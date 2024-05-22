@@ -357,7 +357,7 @@ export class MyScene extends CGFscene {
 
     this.setActiveShader(this.cloudShader);
     this.pushMatrix();
-    // this.cloudMap.bind(1);
+    this.cloudMap.bind(1);
     this.panorama.display();
     this.popMatrix();
     this.setActiveShader(this.defaultShader);
