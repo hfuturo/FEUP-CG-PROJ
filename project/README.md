@@ -1,5 +1,7 @@
 # CG 2023/2024
 
+# Grade: 18.7
+
 ## Group T11G01
 
 ### MyPanorama
